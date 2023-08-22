@@ -5,7 +5,7 @@ import Head from 'next/head'
 import Breakdown from '@/Components/Breakdown'
 import Image from "next/image";
 import Link from 'next/link';
-import { getStaticPaths } from 'next';
+// import { getStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 
 

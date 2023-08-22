@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '@/UserContext';
 import Select from 'react-select';
 import ConfirmationPopup from "./ConfirmationPopup";
-const PROXY_URL = 'http://localhost:8080/';
+// const PROXY_URL = 'http://localhost:8080/';
 
 function Breakdown() {
   const { user, setUser } = useContext(UserContext);
@@ -33,13 +33,13 @@ function Breakdown() {
     ReasonBreakdown: "",
     Sqm:"",
   });
-  let GET_PRODUCTIONISSUE_API="http://192.168.0.61:7073/API/Master/GetProductionIssue?";
+  let GET_PRODUCTIONISSUE_API="http://localhost:3000/api/Master/GetProductionIssue?";
   let GET_PRODUCTIONISSUE_BATCH="Batch=";
   let GET_PRODUCTIONISSUE_BATCH_VALUE="";
   let GET_PRODUCTIONISSUE_WHSCODE="&WhsCode=";
   let GET_PRODUCTIONISSUE_WHSCODE_VALUE="";
   let GET_PRODUCTIONISSUE_BRANCH="&Branch=";
-  let GET_PRODUCTIONISSUE_BRANCH_VALUE="";
+  let GET_PRODUCTIONISSUE_BRANCH_VALUE=parseInt(user.Branch[0].BranchCode);
 
   useEffect(() => {
     fetchData();
@@ -238,7 +238,7 @@ function Breakdown() {
   }, [postData]);
 
   const handleConfirmBreakdown = () => {
-    fetch(`${PROXY_URL}http://192.168.0.61:7689/api/MiscIssue/GoodsReceiptPost`, {
+    fetch(`http://localhost:3000/api-7689/MiscIssue/GoodsReceiptPost`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

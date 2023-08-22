@@ -6,8 +6,8 @@ import Image from 'next/image';
 import { UserContext } from '@/UserContext';
 import "../styles/Home.module.css";
 
-const API_URL = 'http://192.168.0.61:7073/API/master/getusermaster';
-const PROXY_URL = 'http://localhost:8080/';
+const API_URL = 'http://localhost:3000/api/master/getusermaster';
+// const PROXY_URL = 'http://localhost:8080/';
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -20,10 +20,12 @@ function Login() {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${PROXY_URL}${API_URL}?username=${username}&password=${password}`, {
+      const response = await fetch(`${API_URL}?username=${username}&password=${password}`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
+
+      console.log(response)
 
       const data = await response.json();
 

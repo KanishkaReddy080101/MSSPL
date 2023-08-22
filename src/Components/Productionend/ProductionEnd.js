@@ -3,7 +3,7 @@ import Select from "react-select";
 import { UserContext } from '@/UserContext';
 import ConfirmationPopup from "./ConfirmationPopup";
 import ConfirmationResponse from './ConfirmationResponse';
-const PROXY_URL = 'http://localhost:8080/';
+// const PROXY_URL = 'http://localhost:8080/';
 
 function ProductionEnd() {
   const { user, setUser } = useContext(UserContext);
@@ -52,7 +52,7 @@ function ProductionEnd() {
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
 
-  let GET_PRODUCTIONISSUE_API="http://192.168.0.61:7073/API/Master/GetProductionIssue?";
+  let GET_PRODUCTIONISSUE_API="http://localhost:3000/api/Master/GetProductionIssue?";
   let GET_PRODUCTIONISSUE_BATCH="Batch=";
   let GET_PRODUCTIONISSUE_BATCH_VALUE="";
   let GET_PRODUCTIONISSUE_WHSCODE="&WhsCode=";
@@ -62,7 +62,7 @@ function ProductionEnd() {
 
   const getBinOptions = async () => {
     try {
-      const response = await fetch(`http://192.168.0.61:7071/api/Master/BinMasterData?Branch=${parseInt(user.Branch[0].BranchCode)}`);
+      const response = await fetch(`http://localhost:3000/api-7071/Master/BinMasterData?Branch=${parseInt(user.Branch[0].BranchCode)}`);
       const result = await response.json();
       const binOptions = result.responseObject.map((bin) => ({
         value: bin["Bin Code"],
@@ -377,7 +377,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   };
 
   const handleConfirmEndProduction = () => {
-    fetch(`${PROXY_URL}http://192.168.0.61:7689/api/MiscIssue/AddGoodsReceiptGoodsIssue`, {
+    fetch(`http://localhost:3000/api-7689/MiscIssue/AddGoodsReceiptGoodsIssue`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

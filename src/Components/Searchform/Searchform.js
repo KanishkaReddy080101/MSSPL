@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Select from 'react-select';
+import { UserContext } from '@/UserContext';
 
 const Searchform = () => {
+  const { user, setUser } = useContext(UserContext);
   const [warehouseOptions, setWareHouseOptions] = useState([]);
   const [typeOptions, setTypeOptions] = useState([
     { value: 'FLATS', label: 'FLATS' },
@@ -24,7 +26,8 @@ const Searchform = () => {
 
   const fetchOptions = async () => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT);
+      const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT + `&Branch=${parseInt(user.Branch[0].BranchCode)}`);
+      console.log(response)
       const result = await response.json();
       const { responseObject } = result;
 
@@ -91,7 +94,7 @@ const Searchform = () => {
   };
 
   const handleSearch = async () => {
-    const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT);
+    const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT  + `&Branch=${parseInt(user.Branch[0].BranchCode)}`);
     const result = await response.json();
     const { responseObject } = result;
     const results = responseObject.filter((param) => {
