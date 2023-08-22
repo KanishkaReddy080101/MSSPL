@@ -1,6 +1,25 @@
 import React from "react";
 
 const ConfirmationResponse = ({ data, onOK }) => {
+  const lineDetails = data.ReturnObject.LineDetails;
+
+  // Create an array to store the JSX elements for each LineDetails item
+  const lineDetailRows = [];
+  for (let index = 0; index < lineDetails.length; index++) {
+    const result = lineDetails[index];
+    lineDetailRows.push(
+      <tr key={index}>
+        <td>{result.FinishGood}</td>
+        <td>{result.GoodsReceiptBatchNo}</td>
+        <td>{result.BIN}</td>
+        <td>{result.Dia}</td>
+        <td>{result.Thickness}</td>
+        <td>{result.Width}</td>
+        <td>{result.Length}</td>
+        <td>{result.Weight}</td>
+      </tr>
+    );
+  }
   return (
     <div className="popup-overlay">
       <div className="popup">
@@ -12,22 +31,26 @@ const ConfirmationResponse = ({ data, onOK }) => {
           { data.statusCode === 0 && 
           <div className='search-results'>
           <div className='results'>
+          <div className='top-head'>
+              <button className="close-button" onClick={onOK}>
+                Close
+              </button>
+            </div>
               <table>
                 <thead>
                   <tr>
-                    <th>Is Finish Good</th>
-                    <th>Goods Receipt Batch No</th>
+                    <th>Finish Good</th>
+                    <th>Batch No</th>
                     <th>Bin</th>
                     <th>Dia</th>
                     <th>Thickness</th>
                     <th>Width</th>
                     <th>Length</th>
-                    <th>Weight</th>
                     <th>Weight</th> 
                   </tr>
                 </thead>
                 <tbody className='result-search-result'>
-                  {data.ReturnObject.LineDetails.map((result, index) => (
+                {/* {data.ReturnObject.LineDetails.map((result, index) => (
                     <tr key={index}>
                       <td>{result.FinishGood}</td>
                       <td>{result.GoodsReceiptBatchNo}</td>
@@ -38,7 +61,8 @@ const ConfirmationResponse = ({ data, onOK }) => {
                       <td>{result.Length}</td>
                       <td>{result.Weight}</td> 
                     </tr>
-                  ))}
+                  ))} */}
+                  {lineDetailRows}
                 </tbody>
               </table>
           </div>

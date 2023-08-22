@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '@/UserContext';
 import Select from 'react-select';
 import ConfirmationPopup from "./ConfirmationPopup";
+import ConfirmationResponse from './ConfirmationResponse';
 // const PROXY_URL = 'http://localhost:8080/';
 
 function Breakdown() {
@@ -20,7 +21,8 @@ function Breakdown() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  
+    const [showResponse, setShowResponse] = useState(false)
+  const [postResponse, setPostResponse] = useState('')
   const [postData, setPostData] = useState({
     Branch: "",
     PostingDate: "",
@@ -254,6 +256,8 @@ function Breakdown() {
         setCuttingMachine('');
         setBladeGRN('');
         setBladeSqCm('');
+        setPostResponse(data)
+        setShowResponse(true);
       })
       .catch((error) => {
         console.error("Error posting production data:", error);
@@ -261,6 +265,9 @@ function Breakdown() {
       });
   };
 
+  const handleOK = () => {
+    setShowResponse(false);
+  }
   const handleCancelProduction = () => {
     setShowConfirmation(false);
   };
@@ -385,6 +392,9 @@ function Breakdown() {
             sqrCmValue={bladeSqCm}
             />
           )}
+          {showResponse && (
+        <ConfirmationResponse data={postResponse} onOK={handleOK}/>
+      )}
     </>
   );
 }

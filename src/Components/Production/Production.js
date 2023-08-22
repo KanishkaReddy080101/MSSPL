@@ -256,10 +256,9 @@ const Production = () => {
       .then((data) => {
         console.log("Production data successfully posted:", data);
         const successdata = data;
-        if (successdata.statusMessage === 'Failed') {
           setShowResponse(true);
           setPostResponse(data);
-        }
+        
         setShowConfirmation(false);
         setSelectedBatchNoOption(null)
         setSelectedSalesOrderOption(null)

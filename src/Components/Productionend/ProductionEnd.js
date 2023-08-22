@@ -3,6 +3,7 @@ import Select from "react-select";
 import { UserContext } from '@/UserContext';
 import ConfirmationPopup from "./ConfirmationPopup";
 import ConfirmationResponse from './ConfirmationResponse';
+import BlockWeightExceededPopup from './BlockWeightExceedsPopup';
 // const PROXY_URL = 'http://localhost:8080/';
 
 function ProductionEnd() {
@@ -47,6 +48,7 @@ function ProductionEnd() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showResponse, setShowResponse] = useState(false)
   const [postResponse, setPostResponse] = useState('')
+  const [showBlockWeightPopup, setShowBlockWeightPopup] = useState(false);
   const [postData, setPostData] = useState('');
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -72,24 +74,24 @@ function ProductionEnd() {
       setBinOptions2(binOptions);
       if (finishGood1 === true) {
         if (parseInt(user.Branch[0].BranchCode) === 3) {
-          setSelectedBinOption({ value: 'W005', label: 'W005'})
+          setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
         } else if (parseInt(user.Branch[0].BranchCode) === 5) {
-          setSelectedBinOption({ value: 'W009', label: 'W009'})
+          setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
         } else if (parseInt(user.Branch[0].BranchCode) === 7) {
-          setSelectedBinOption({ value: 'W013', label: 'W013'})
+          setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
         } else if (parseInt(user.Branch[0].BranchCode) === 6) {
-          setSelectedBinOption({ value: 'W017', label: 'W017'})
+          setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
         }
       }
       if (finishGood2 === true) {
         if (parseInt(user.Branch[0].BranchCode) === 3) {
-          setSelectedBinOption2({ value: 'W005', label: 'W005'})
+          setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
         } else if (parseInt(user.Branch[0].BranchCode) === 5) {
-          setSelectedBinOption2({ value: 'W009', label: 'W009'})
+          setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
         } else if (parseInt(user.Branch[0].BranchCode) === 7) {
-          setSelectedBinOption2({ value: 'W013', label: 'W013'})
+          setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
         } else if (parseInt(user.Branch[0].BranchCode) === 6) {
-          setSelectedBinOption2({ value: 'W017', label: 'W017'})
+          setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
         }
       }
     } catch (error) {
@@ -105,13 +107,13 @@ function ProductionEnd() {
     
     if (finishGood1 === true) {
       if (parseInt(user.Branch[0].BranchCode) === 3) {
-        setSelectedBinOption({ value: 'W005', label: 'W005'})
+        setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
       } else if (parseInt(user.Branch[0].BranchCode) === 5) {
-        setSelectedBinOption({ value: 'W009', label: 'W009'})
+        setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
       } else if (parseInt(user.Branch[0].BranchCode) === 7) {
-        setSelectedBinOption({ value: 'W013', label: 'W013'})
+        setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
       } else if (parseInt(user.Branch[0].BranchCode) === 6) {
-        setSelectedBinOption({ value: 'W017', label: 'W017'})
+        setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
       }
     } else {
       setSelectedBinOption(e);
@@ -121,13 +123,13 @@ function ProductionEnd() {
    
     if (finishGood2 === true) {
       if (parseInt(user.Branch[0].BranchCode) === 3) {
-        setSelectedBinOption2({ value: 'W005', label: 'W005'})
+        setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
       } else if (parseInt(user.Branch[0].BranchCode) === 5) {
-        setSelectedBinOption2({ value: 'W009', label: 'W009'})
+        setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
       } else if (parseInt(user.Branch[0].BranchCode) === 7) {
-        setSelectedBinOption2({ value: 'W013', label: 'W013'})
+        setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
       } else if (parseInt(user.Branch[0].BranchCode) === 6) {
-        setSelectedBinOption2({ value: 'W017', label: 'W017'})
+        setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
       }
     } else {
     setSelectedBinOption2(e);
@@ -351,26 +353,28 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
       }
       }
 
-      const postData = {
-        Branch: parseInt(user.Branch[0].BranchCode),
-        Series: 216,
-        GISeries: 220,
-        PostingDate: currentDate,
-        IssueBy: user.Name,
-        ProductionEndTime: currentTime,
-        BladeCode: BladeCode,
-        BladeBatch: BladeBatch,
-        CuƫngMachineNo: cuttingMachine,
-        SalesOrderNumber: salesOrderOptions,
-        LineNum: lineNo,
-        BatchNum: selectedBatchNoOption.value,
-        ItemCode: grnNo,
-        LineDetails: lineDetails,
-      };
-
-      setPostData(postData);
-      setShowConfirmation(true);
-      console.log(postData)
+        const postData = {
+          Branch: parseInt(user.Branch[0].BranchCode),
+          Series: 216,
+          GISeries: 220,
+          PostingDate: currentDate,
+          IssueBy: user.Name,
+          ProductionEndTime: currentTime,
+          BladeCode: BladeCode,
+          BladeBatch: BladeBatch,
+          CuƫngMachineNo: cuttingMachine,
+          SalesOrderNumber: salesOrderOptions,
+          LineNum: lineNo,
+          BatchNum: selectedBatchNoOption.value,
+          ItemCode: grnNo,
+          LineDetails: lineDetails,
+        };
+        if ((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) <= blockWeight) {
+          setPostData(postData);
+          setShowConfirmation(true);
+        } else {
+          setShowBlockWeightPopup(true);
+        }
     } else {
       console.error("Please select all required options before stopping production.");
     }
@@ -390,6 +394,39 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
         setPostResponse(data);
         setShowConfirmation(false);
         setShowResponse(true);
+        setSelectedBatchNoOption(null)
+        setIsMultiplePieces(false);
+    setNumberOfPieces('');
+    setIsMultiplePieces2(false);
+    setNumberOfPieces2('');
+    setSelectedBatchNoOption(null);
+    setSalesOrderOptions('')
+    setGradeName('');
+    setCuttingMachine('');
+    setGrnNo('');
+    setlineNo('');
+    setBladeBatch('');
+    setBladeCode('');
+    setWarehouse('');
+    setBlockWeight('');
+    setStartTime('');
+    setStartDate('');
+    setDia('');
+    setLength('');
+    setWidth('');
+    setThickness('');
+    setWeight('');
+    setDia2('');
+    setLength2('');
+    setWidth2('');
+    setThickness2('');
+    setWeight2('');
+    setSelectedBinOption(null);
+    setSelectedBinOption2(null);
+    setFinishGood1(false);
+    setFinishGood2(false);
+    setSelectedIssueDocNum(null);
+
       })
       .catch((error) => {
         console.error("Error posting production data:", error);
@@ -405,17 +442,21 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
     setShowResponse(false);
   }
 
+  const handleCloseBlockWeightPopup = () => {
+    setShowBlockWeightPopup(false);
+  };
+
   const Checked1 = () => {
     console.log(finishGood1);
     setFinishGood1(!finishGood1);
     if (parseInt(user.Branch[0].BranchCode) === 3) {
-      setSelectedBinOption({ value: 'W005', label: 'W005'})
+      setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
     } else if (parseInt(user.Branch[0].BranchCode) === 5) {
-      setSelectedBinOption({ value: 'W009', label: 'W009'})
+      setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
     } else if (parseInt(user.Branch[0].BranchCode) === 7) {
-      setSelectedBinOption({ value: 'W013', label: 'W013'})
+      setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
     } else if (parseInt(user.Branch[0].BranchCode) === 6) {
-      setSelectedBinOption({ value: 'W017', label: 'W017'})
+      setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
     }
   };
   
@@ -423,13 +464,13 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
     console.log(finishGood2);
     setFinishGood2(!finishGood2);
     if (parseInt(user.Branch[0].BranchCode) === 3) {
-      setSelectedBinOption2({ value: 'W005', label: 'W005'})
+      setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
     } else if (parseInt(user.Branch[0].BranchCode) === 5) {
-      setSelectedBinOption2({ value: 'W009', label: 'W009'})
+      setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
     } else if (parseInt(user.Branch[0].BranchCode) === 7) {
-      setSelectedBinOption2({ value: 'W013', label: 'W013'})
+      setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
     } else if (parseInt(user.Branch[0].BranchCode) === 6) {
-      setSelectedBinOption2({ value: 'W017', label: 'W017'})
+      setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
     }
   };
   
@@ -522,7 +563,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
           </div>
         <div className="col">
             <div className="form-control mb-3">
-              <label htmlFor="gadeName">Blade Name</label>
+              <label htmlFor="gadeName">Grade Name</label>
               <input
                 type="text"
                 className="form-control"
@@ -859,6 +900,10 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
 
       {showResponse && (
         <ConfirmationResponse data={postResponse} onOK={handleOK}/>
+      )}
+
+{showBlockWeightPopup && (
+        <BlockWeightExceededPopup onClose={handleCloseBlockWeightPopup} />
       )}
     </>
   );
