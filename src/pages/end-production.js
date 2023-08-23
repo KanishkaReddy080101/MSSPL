@@ -5,7 +5,7 @@ import Head from 'next/head'
 import ProductionEnd from '@/Components/Productionend'
 import Image from "next/image";
 import Link from 'next/link';
-import { getStaticPaths } from 'next'
+// import { getStaticPaths } from 'next'
 import { useRouter } from 'next/router';
 
 function EndProduction() {

@@ -363,7 +363,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
           BladeCode: BladeCode,
           BladeBatch: BladeBatch,
           CuƫngMachineNo: cuttingMachine,
-          SalesOrderNumber: salesOrderOptions,
+          SaleOrderNumber: salesOrderOptions,
           LineNum: lineNo,
           BatchNum: selectedBatchNoOption.value,
           ItemCode: grnNo,
@@ -473,6 +473,8 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
       setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
     }
   };
+
+
   
   
 
