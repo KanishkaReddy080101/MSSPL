@@ -3,7 +3,6 @@ import { UserContext } from '@/UserContext';
 import Select from 'react-select';
 import ConfirmationPopup from "./ConfirmationPopup";
 import ConfirmationResponse from './ConfirmationResponse';
-// const PROXY_URL = 'http://localhost:8080/';
 
 function Breakdown() {
   const { user } = useContext(UserContext);
@@ -50,7 +49,7 @@ function Breakdown() {
 
   const fetchData = async () => {
     try {
-      const batchResponse = await fetch(GET_PRODUCTIONISSUE_API+GET_PRODUCTIONISSUE_BATCH+GET_PRODUCTIONISSUE_BATCH_VALUE+GET_PRODUCTIONISSUE_WHSCODE+GET_PRODUCTIONISSUE_WHSCODE_VALUE+GET_PRODUCTIONISSUE_BRANCH+GET_PRODUCTIONISSUE_BRANCH_VALUE);
+      const batchResponse = await fetch(process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`);
       const batchResult = await batchResponse.json();
 
       if (Array.isArray(batchResult)) {
@@ -70,7 +69,7 @@ function Breakdown() {
   const fetchIssueDocNums = async (batchNo) => {
     try {
       const issueDocNumResponse = await fetch(
-        `${GET_PRODUCTIONISSUE_API}${GET_PRODUCTIONISSUE_BATCH}${batchNo}${GET_PRODUCTIONISSUE_WHSCODE}${GET_PRODUCTIONISSUE_WHSCODE_VALUE}${GET_PRODUCTIONISSUE_BRANCH}${GET_PRODUCTIONISSUE_BRANCH_VALUE}`
+        process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`
       );
       const issueDocNumResult = await issueDocNumResponse.json();
 
@@ -99,7 +98,7 @@ function Breakdown() {
     if (selectedIssueDocNum) {
       try {
         const issueDocNumDetailsResponse = await fetch(
-          `${GET_PRODUCTIONISSUE_API}${GET_PRODUCTIONISSUE_BATCH}${batchNo}${GET_PRODUCTIONISSUE_WHSCODE}${GET_PRODUCTIONISSUE_WHSCODE_VALUE}${GET_PRODUCTIONISSUE_BRANCH}${GET_PRODUCTIONISSUE_BRANCH_VALUE}`
+          process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`
         );
         const issueDocNumDetailsResult = await issueDocNumDetailsResponse.json();
   
@@ -135,7 +134,7 @@ function Breakdown() {
     if (selectedBatch) {
       try {
         const reasonResponse = await fetch(
-          `${GET_PRODUCTIONISSUE_API}${GET_PRODUCTIONISSUE_BATCH}${GET_PRODUCTIONISSUE_BATCH_VALUE}${GET_PRODUCTIONISSUE_WHSCODE}${GET_PRODUCTIONISSUE_WHSCODE_VALUE}${GET_PRODUCTIONISSUE_BRANCH}${GET_PRODUCTIONISSUE_BRANCH_VALUE}`
+          process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`
         );
         const reasonResult = await reasonResponse.json();
         const reasonsArray = reasonResult
@@ -193,7 +192,7 @@ function Breakdown() {
   const autoFillDetails = async () => {
     if (selectedBatch) {
       try {
-        const batchResponse = await fetch(GET_PRODUCTIONISSUE_API+GET_PRODUCTIONISSUE_BATCH+GET_PRODUCTIONISSUE_BATCH_VALUE+GET_PRODUCTIONISSUE_WHSCODE+GET_PRODUCTIONISSUE_WHSCODE_VALUE+GET_PRODUCTIONISSUE_BRANCH+GET_PRODUCTIONISSUE_BRANCH_VALUE);
+        const batchResponse = await fetch(process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`);
         const batchResult = await batchResponse.json();
 
         const selectedBatchDetails = batchResult.find((batch) => batch.BatchNo === selectedBatch.value);
@@ -241,7 +240,7 @@ function Breakdown() {
   }, [postData]);
 
   const handleConfirmBreakdown = () => {
-    fetch(`http://localhost:3000/api-7689/MiscIssue/GoodsReceiptPost`, {
+    fetch(process.env.NEXT_PUBLIC_GOODSRECEIPT_POST_API_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

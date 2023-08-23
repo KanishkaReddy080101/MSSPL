@@ -5,13 +5,13 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const router = useRouter();
-  const API_URL = 'http://localhost:3000/api/master/getusermaster';
+  const API_URL = '';
   async function loginUser(event, username, password) {
     event.preventDefault();
     console.log(event)
 
     try {
-      const response = await fetch(`${API_URL}?username=${username}&password=${password}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_LOGIN_API_ENDPOINT}?username=${username}&password=${password}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });

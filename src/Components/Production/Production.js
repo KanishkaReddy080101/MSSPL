@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Select from "react-select";
 import { UserContext } from '@/UserContext';
-import { useRouter } from 'next/router';
 import ConfirmationPopup from "./ConfirmationPopup";
 import ConfirmationResponse from './ConfirmationResponse';
 import "../../styles/Home.module.css"
-// const PROXY_URL = 'http://localhost:8080/';
 
 const Production = () => {
   const [cuttingMachineOptions, setCuttingMachineOptions] = useState([]);
@@ -127,8 +125,8 @@ const Production = () => {
   
   const salesOrder = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/Master/OpenSalesOrder?SaleNo=&Whscode=&Branch=${parseInt(user.Branch[0].BranchCode)}`);
-      const result = await response.json();
+     const response = await fetch(process.env.NEXT_PUBLIC_SALESORDER_API_ENDPOINT + `${parseInt(user.Branch[0].BranchCode)}`);
+     const result = await response.json();
       const newArr = result.map((ele) => ({
         value: ele.SalesOrderNumber,
         label: ele.SalesOrderNumber,
@@ -244,7 +242,7 @@ const Production = () => {
   }, [postData]);
 
   const handleConfirmProduction = () => {
-    fetch(`http://localhost:3000/api-7689/MiscIssue/GoodsIssuePost`, {
+    fetch(process.env.NEXT_PUBLIC_GOODSISSUE_POST_API_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
