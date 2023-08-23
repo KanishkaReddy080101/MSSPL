@@ -9,19 +9,19 @@ import { useRouter } from 'next/router';
 
 
 function Startproduction() {
-  const { user, setUser } = useContext(UserContext);
+  const { user, handleLogout } = useContext(UserContext);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.push('/login');
+  //   }
+  // }, [user, router]);
 
-  const handleLogout = () => {
-    setUser(null);
-    router.push('/login');
-  };
+  // const handleLogout = () => {
+  //   setUser(null);
+  //   router.push('/login');
+  // };
   return (
     <>
     <Head>

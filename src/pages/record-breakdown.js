@@ -10,19 +10,20 @@ import { useRouter } from 'next/router';
 
 
 const RecordBreakdown = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, handleLogout } = useContext(UserContext);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     setUser(null)
+  //     router.push('/login');
+  //   }
+  // }, [user, router]);
 
-  const handleLogout = () => {
-    setUser(null);
-    router.push('/login');
-  };
+  // const handleLogout = () => {
+  //   setUser(null);
+  //   router.push('/login');
+  // };
   return (
     <>
     <Head>
@@ -57,9 +58,9 @@ const RecordBreakdown = () => {
         <div className="col pt-5 user-details">
         {user && (
             <>
-              <p className="username">User Name: {user.UserID}</p>
-              {user.Branch && user.Branch.length > 0 && (
-                <p className="branch">Branch: {user.Branch[0].BranchName}</p>
+              <p className="username">User Name: {user?.UserID}</p>
+              {user?.Branch && user?.Branch.length > 0 && (
+                <p className="branch">Branch: {user?.Branch[0].BranchName}</p>
               )}
               <button onClick={handleLogout}>Logout</button>
             </>

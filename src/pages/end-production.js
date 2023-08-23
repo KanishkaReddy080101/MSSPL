@@ -9,19 +9,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 function EndProduction() {
-  const { user, setUser } = useContext(UserContext);
+  const { user, handleLogout } = useContext(UserContext);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.push('/login');
+  //   }
+  // }, [user, router]);
 
-  const handleLogout = () => {
-    setUser(null);
-    router.push('/login');
-  };
+  // const handleLogout = () => {
+  //   setUser(null);
+  //   router.push('/login');
+  // };
   return (
     <>
      <Head>
@@ -54,11 +54,11 @@ function EndProduction() {
           <p className="title"> End Production</p>
         </div>
         <div className="col pt-5 user-details">
-        {user && (
+        {user != null && (
             <>
-              <p className="username">User Name: {user.UserID}</p>
-              {user.Branch && user.Branch.length > 0 && (
-                <p className="branch">Branch: {user.Branch[0].BranchName}</p>
+              <p className="username">User Name: {user?.UserID}</p>
+              {user?.Branch && user?.Branch?.length > 0 && (
+                <p className="branch">Branch: {user?.Branch[0]?.BranchName}</p>
               )}
               <button onClick={handleLogout}>Logout</button>
             </>

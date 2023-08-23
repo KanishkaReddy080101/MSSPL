@@ -6,7 +6,7 @@ import ConfirmationResponse from './ConfirmationResponse';
 // const PROXY_URL = 'http://localhost:8080/';
 
 function Breakdown() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [batchOptions, setBatchOptions] = useState([]);
   const [reasonOptions, setReasonOptions] = useState([]);
   const [selectedBatch, setSelectedBatch] = useState(null);
@@ -35,13 +35,14 @@ function Breakdown() {
     ReasonBreakdown: "",
     Sqm:"",
   });
+
   let GET_PRODUCTIONISSUE_API="http://localhost:3000/api/Master/GetProductionIssue?";
   let GET_PRODUCTIONISSUE_BATCH="Batch=";
   let GET_PRODUCTIONISSUE_BATCH_VALUE="";
   let GET_PRODUCTIONISSUE_WHSCODE="&WhsCode=";
   let GET_PRODUCTIONISSUE_WHSCODE_VALUE="";
   let GET_PRODUCTIONISSUE_BRANCH="&Branch=";
-  let GET_PRODUCTIONISSUE_BRANCH_VALUE=parseInt(user.Branch[0].BranchCode);
+  let GET_PRODUCTIONISSUE_BRANCH_VALUE=parseInt(user?.Branch[0].BranchCode);
 
   useEffect(() => {
     fetchData();

@@ -13,40 +13,41 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [branchCode, setBranchCode] = useState("");
-  const { setUser } = useContext(UserContext);
+  const { user, loginUser } = useContext(UserContext);
   const router = useRouter();
 
-  async function loginUser(event) {
-    event.preventDefault();
+  // async function loginUser(event) {
+  //   event.preventDefault();
 
-    try {
-      const response = await fetch(`${API_URL}?username=${username}&password=${password}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      });
+  //   try {
+  //     const response = await fetch(`${API_URL}?username=${username}&password=${password}`, {
+  //       method: 'GET',
+  //       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+  //     });
 
-      console.log(response)
+  //     console.log(response)
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (response.ok && data.length > 0) {
-        const user = data.find(user => user.UserID === username && user.Password === password);
-        if (user) {
-          setUser(user); // Set the user details in the context
-          const branch = user.Branch[0];
-          // alert("Login successful");
-          router.push("/production-home");
-        } else {
-          alert("User not found");
-        }
-      } else {
-        alert("Login failed");
-      }
-    } catch (error) {
-      console.error("An error occurred while logging in:", error);
-      alert("An error occurred while logging in: " + error.message);
-    }
-  }
+  //     if (response.ok && data.length > 0) {
+  //       const user = data.find(user => user.UserID === username && user.Password === password);
+  //       if (user) {
+  //         setUser(user); // Set the user details in the context
+  //         const branch = user.Branch[0];
+  //         // alert("Login successful");
+  //         router.push("/production-home");
+  //       } else {
+  //         alert("User not found");
+  //       }
+  //     } else {
+  //       alert("Login failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("An error occurred while logging in:", error);
+  //     alert("An error occurred while logging in: " + error.message);
+  //   }
+  // }
+  console.log(user);
 
   return (
     <>
@@ -70,7 +71,7 @@ function Login() {
                         <h6 className="mt-1 mb-5 pb-1">Multiple Special Steel Pvt. Ltd.</h6>
                       </div>
 
-                      <form onSubmit={loginUser}>
+                      <form onSubmit={(e) => loginUser(e, username, password)}>
                         <p>Please login to your account</p>
 
                         <div className="form-floating mb-3">

@@ -7,19 +7,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 function ProductionHome() {
-  const { user, setUser } = useContext(UserContext);
+  const { user, handleLogout } = useContext(UserContext);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     setUser(null);
+  //     router.push('/login');
+  //   }
+  // }, [user, router]);
 
-  const handleLogout = () => {
-    setUser(null);
-    router.push('/login');
-  };
+  // const handleLogout = () => {
+  //   setUser(null);
+  //   router.push('/login');
+  // };
   return (
     <>
     <Head>

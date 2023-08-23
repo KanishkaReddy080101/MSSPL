@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Select from "react-select";
 import { UserContext } from '@/UserContext';
+import { useRouter } from 'next/router';
 import ConfirmationPopup from "./ConfirmationPopup";
 import ConfirmationResponse from './ConfirmationResponse';
 import "../../styles/Home.module.css"
@@ -33,7 +34,7 @@ const Production = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showResponse, setShowResponse] = useState(false)
   const [postResponse, setPostResponse] = useState('')
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const [postData, setPostData] = useState({
@@ -48,8 +49,6 @@ const Production = () => {
     LineNum: "",
     BatchNum: "",
   });
-
-
 
   useEffect(() => {
     fetchCuttingMachines();

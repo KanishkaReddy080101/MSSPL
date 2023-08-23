@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Select from "react-select";
 import { UserContext } from '@/UserContext';
+import { useRouter } from 'next/router';
 import ConfirmationPopup from "./ConfirmationPopup";
 import ConfirmationResponse from './ConfirmationResponse';
 import BlockWeightExceededPopup from './BlockWeightExceedsPopup';
-// const PROXY_URL = 'http://localhost:8080/';
 
 function ProductionEnd() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [isMultiplePieces, setIsMultiplePieces] = useState(false);
   const [numberOfPieces, setNumberOfPieces] = useState('');
   const [isMultiplePieces2, setIsMultiplePieces2] = useState(false);
@@ -53,18 +53,17 @@ function ProductionEnd() {
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-
   let GET_PRODUCTIONISSUE_API="http://localhost:3000/api/Master/GetProductionIssue?";
   let GET_PRODUCTIONISSUE_BATCH="Batch=";
   let GET_PRODUCTIONISSUE_BATCH_VALUE="";
   let GET_PRODUCTIONISSUE_WHSCODE="&WhsCode=";
   let GET_PRODUCTIONISSUE_WHSCODE_VALUE="";
   let GET_PRODUCTIONISSUE_BRANCH="&Branch=";
-  let GET_PRODUCTIONISSUE_BRANCH_VALUE=parseInt(user.Branch[0].BranchCode);
+  let GET_PRODUCTIONISSUE_BRANCH_VALUE=parseInt(user?.Branch[0]?.BranchCode);
 
   const getBinOptions = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api-7071/Master/BinMasterData?Branch=${parseInt(user.Branch[0].BranchCode)}`);
+      const response = await fetch(`http://localhost:3000/api-7071/Master/BinMasterData?Branch=${parseInt(user?.Branch[0].BranchCode)}`);
       const result = await response.json();
       const binOptions = result.responseObject.map((bin) => ({
         value: bin["Bin Code"],
@@ -73,24 +72,24 @@ function ProductionEnd() {
       setBinOptions(binOptions);
       setBinOptions2(binOptions);
       if (finishGood1 === true) {
-        if (parseInt(user.Branch[0].BranchCode) === 3) {
+        if (parseInt(user?.Branch[0].BranchCode) === 3) {
           setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
-        } else if (parseInt(user.Branch[0].BranchCode) === 5) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
           setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
-        } else if (parseInt(user.Branch[0].BranchCode) === 7) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
           setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
-        } else if (parseInt(user.Branch[0].BranchCode) === 6) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
           setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
         }
       }
       if (finishGood2 === true) {
-        if (parseInt(user.Branch[0].BranchCode) === 3) {
+        if (parseInt(user?.Branch[0].BranchCode) === 3) {
           setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
-        } else if (parseInt(user.Branch[0].BranchCode) === 5) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
           setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
-        } else if (parseInt(user.Branch[0].BranchCode) === 7) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
           setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
-        } else if (parseInt(user.Branch[0].BranchCode) === 6) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
           setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
         }
       }
@@ -106,13 +105,13 @@ function ProductionEnd() {
   const handleBinChange = (e) => {
     
     if (finishGood1 === true) {
-      if (parseInt(user.Branch[0].BranchCode) === 3) {
+      if (parseInt(user?.Branch[0].BranchCode) === 3) {
         setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
-      } else if (parseInt(user.Branch[0].BranchCode) === 5) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
         setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
-      } else if (parseInt(user.Branch[0].BranchCode) === 7) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
         setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
-      } else if (parseInt(user.Branch[0].BranchCode) === 6) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
         setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
       }
     } else {
@@ -122,13 +121,13 @@ function ProductionEnd() {
   const handleBinChange2 = (e) => {
    
     if (finishGood2 === true) {
-      if (parseInt(user.Branch[0].BranchCode) === 3) {
+      if (parseInt(user?.Branch[0].BranchCode) === 3) {
         setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
-      } else if (parseInt(user.Branch[0].BranchCode) === 5) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
         setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
-      } else if (parseInt(user.Branch[0].BranchCode) === 7) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
         setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
-      } else if (parseInt(user.Branch[0].BranchCode) === 6) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
         setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
       }
     } else {
@@ -354,11 +353,11 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
       }
 
         const postData = {
-          Branch: parseInt(user.Branch[0].BranchCode),
+          Branch: parseInt(user?.Branch[0].BranchCode),
           Series: 216,
           GISeries: 220,
           PostingDate: currentDate,
-          IssueBy: user.Name,
+          IssueBy: user?.Name,
           ProductionEndTime: currentTime,
           BladeCode: BladeCode,
           BladeBatch: BladeBatch,
@@ -449,13 +448,13 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   const Checked1 = () => {
     console.log(finishGood1);
     setFinishGood1(!finishGood1);
-    if (parseInt(user.Branch[0].BranchCode) === 3) {
+    if (parseInt(user?.Branch[0].BranchCode) === 3) {
       setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
-    } else if (parseInt(user.Branch[0].BranchCode) === 5) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
       setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
-    } else if (parseInt(user.Branch[0].BranchCode) === 7) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
       setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
-    } else if (parseInt(user.Branch[0].BranchCode) === 6) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
       setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
     }
   };
@@ -463,13 +462,13 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   const Checked2 = () => {
     console.log(finishGood2);
     setFinishGood2(!finishGood2);
-    if (parseInt(user.Branch[0].BranchCode) === 3) {
+    if (parseInt(user?.Branch[0].BranchCode) === 3) {
       setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
-    } else if (parseInt(user.Branch[0].BranchCode) === 5) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
       setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
-    } else if (parseInt(user.Branch[0].BranchCode) === 7) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
       setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
-    } else if (parseInt(user.Branch[0].BranchCode) === 6) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
       setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
     }
   };

@@ -1,7 +1,16 @@
+import React, { useContext, useEffect } from 'react';
 import Head from 'next/head'
-
+import { UserContext } from '@/UserContext';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const { user, handleLogout } = useContext(UserContext);
+  const router = useRouter();
+  useEffect(() => {
+    if (!user) {
+      router.push('/login')
+    }
+  }, [])
   return (
     <>
       <Head>
@@ -11,7 +20,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-       
+
       </main>
     </>
   )
