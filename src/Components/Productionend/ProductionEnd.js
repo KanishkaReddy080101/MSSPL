@@ -53,17 +53,9 @@ function ProductionEnd() {
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  let GET_PRODUCTIONISSUE_API="http://localhost:3000/api/Master/GetProductionIssue?";
-  let GET_PRODUCTIONISSUE_BATCH="Batch=";
-  let GET_PRODUCTIONISSUE_BATCH_VALUE="";
-  let GET_PRODUCTIONISSUE_WHSCODE="&WhsCode=";
-  let GET_PRODUCTIONISSUE_WHSCODE_VALUE="";
-  let GET_PRODUCTIONISSUE_BRANCH="&Branch=";
-  let GET_PRODUCTIONISSUE_BRANCH_VALUE=parseInt(user?.Branch[0]?.BranchCode);
-
   const getBinOptions = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api-7071/Master/BinMasterData?Branch=${parseInt(user?.Branch[0].BranchCode)}`);
+      const response = await fetch(process.env.NEXT_PUBLIC_BINMASTER_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`);
       const result = await response.json();
       const binOptions = result.responseObject.map((bin) => ({
         value: bin["Bin Code"],
@@ -137,7 +129,7 @@ function ProductionEnd() {
 
 const batchNo = async () => {
     try {
-      const response = await fetch(GET_PRODUCTIONISSUE_API+GET_PRODUCTIONISSUE_BATCH+GET_PRODUCTIONISSUE_BATCH_VALUE+GET_PRODUCTIONISSUE_WHSCODE+GET_PRODUCTIONISSUE_WHSCODE_VALUE+GET_PRODUCTIONISSUE_BRANCH+GET_PRODUCTIONISSUE_BRANCH_VALUE);
+      const response = await fetch(process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`);
       const result = await response.json();
       const batchNo = result.map((param) => ({
         value: param["BatchNo"],
@@ -176,7 +168,7 @@ const batchNo = async () => {
 const fetchIssueDocNums = async (batchNo) => {
   try {
     const issueDocNumResponse = await fetch(
-      `${GET_PRODUCTIONISSUE_API}${GET_PRODUCTIONISSUE_BATCH}${batchNo}${GET_PRODUCTIONISSUE_WHSCODE}${GET_PRODUCTIONISSUE_WHSCODE_VALUE}${GET_PRODUCTIONISSUE_BRANCH}${GET_PRODUCTIONISSUE_BRANCH_VALUE}`
+      process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`
     );
     const issueDocNumResult = await issueDocNumResponse.json();
 
@@ -208,7 +200,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   if (selectedIssueDocNum) {
     try {
       const issueDocNumDetailsResponse = await fetch(
-        `${GET_PRODUCTIONISSUE_API}${GET_PRODUCTIONISSUE_BATCH}${selectedBatchNoOption.value}${GET_PRODUCTIONISSUE_WHSCODE}${GET_PRODUCTIONISSUE_WHSCODE_VALUE}${GET_PRODUCTIONISSUE_BRANCH}${GET_PRODUCTIONISSUE_BRANCH_VALUE}`
+        process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`
       );
       const issueDocNumDetailsResult = await issueDocNumDetailsResponse.json();
 
@@ -264,7 +256,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
     if (selectedBatchNo) {
       try {
         const reasonResponse = await fetch(
-          `${GET_PRODUCTIONISSUE_API}${GET_PRODUCTIONISSUE_BATCH}${GET_PRODUCTIONISSUE_BATCH_VALUE}${GET_PRODUCTIONISSUE_WHSCODE}${GET_PRODUCTIONISSUE_WHSCODE_VALUE}${GET_PRODUCTIONISSUE_BRANCH}${GET_PRODUCTIONISSUE_BRANCH_VALUE}`
+          process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`
         );
         const reasonResult = await reasonResponse.json();
       
@@ -380,7 +372,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   };
 
   const handleConfirmEndProduction = () => {
-    fetch(`http://localhost:3000/api-7689/MiscIssue/AddGoodsReceiptGoodsIssue`, {
+    fetch(process.env.NEXT_PUBLIC_GOODSRECEIPT_GOODSISSUE_POST_API_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

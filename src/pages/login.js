@@ -1,52 +1,16 @@
 "use client"
 import React, { useState, useContext } from 'react';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import { UserContext } from '@/UserContext';
 import "../styles/Home.module.css";
-
-const API_URL = 'http://localhost:3000/api/master/getusermaster';
-// const PROXY_URL = 'http://localhost:8080/';
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [branchCode, setBranchCode] = useState("");
   const { user, loginUser } = useContext(UserContext);
-  const router = useRouter();
 
-  // async function loginUser(event) {
-  //   event.preventDefault();
-
-  //   try {
-  //     const response = await fetch(`${API_URL}?username=${username}&password=${password}`, {
-  //       method: 'GET',
-  //       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-  //     });
-
-  //     console.log(response)
-
-  //     const data = await response.json();
-
-  //     if (response.ok && data.length > 0) {
-  //       const user = data.find(user => user.UserID === username && user.Password === password);
-  //       if (user) {
-  //         setUser(user); // Set the user details in the context
-  //         const branch = user.Branch[0];
-  //         // alert("Login successful");
-  //         router.push("/production-home");
-  //       } else {
-  //         alert("User not found");
-  //       }
-  //     } else {
-  //       alert("Login failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("An error occurred while logging in:", error);
-  //     alert("An error occurred while logging in: " + error.message);
-  //   }
-  // }
   console.log(user);
 
   return (
