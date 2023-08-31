@@ -516,8 +516,24 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
             />
             </div>
           </div>
-          {/* {console.log(batchOccurrenceCount, 'batchoccrcont')} */}
           <div className="col">
+            <div className="form-control mb-3">
+              <label htmlFor="issueDocNum">Issue Doc Num</label>
+              <Select
+                id="issueDocNum"
+                instanceId="issueDocNum"
+                className="select-form-control select-dropdown"
+                options={issueDocNumOptions}
+                value={selectedIssueDocNum}
+                onChange={handleIssueDocNumChange}
+                isSearchable={true}
+              />
+              </div>
+            </div>
+          {/* {console.log(batchOccurrenceCount, 'batchoccrcont')} */}
+          
+        </div>
+        <div className="col">
           <div className="form-control mb-3">
               <label htmlFor="floatingInputBin">Sales Order No.</label>
               <input
@@ -528,24 +544,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
                 onChange={(e) => setSalesOrderOptions(e.target.value)}
               />
             </div>
-          </div>
-        </div>
-{selectedBatchNoOption && (
-            <div className="col">
-            <div className="form-control mb-3">
-              <label htmlFor="issueDocNum">Issue Doc Num</label>
-              <Select
-                id="issueDocNum"
-                instanceId="issueDocNum"
-                className="select-dropdown"
-                options={issueDocNumOptions}
-                value={selectedIssueDocNum}
-                onChange={handleIssueDocNumChange}
-                isSearchable={true}
-              />
-              </div>
-            </div>
-          )}
+          </div> 
         <div className="row pb-3">
           <div className="col">
             <div className="form-control mb-3">

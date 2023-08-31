@@ -7,7 +7,7 @@ const Searchform = () => {
   const [warehouseOptions, setWareHouseOptions] = useState([]);
   const [typeOptions, setTypeOptions] = useState([
     { value: 'FLATS', label: 'FLATS' },
-    { value: 'Round', label: 'Round' },
+    { value: 'ROUNDS', label: 'ROUNDS' },
   ]);
   const [gradeOptions, setGradeOptions] = useState([]);
   const [binOptions, setBinOptions] = useState([]);
