@@ -277,19 +277,35 @@ function Breakdown() {
       <div className="ps-5 pe-5 pt-5">
         <div className="row pb-3">
           <div className="col">
+        <div className="form-control mb-3">
             <label htmlFor="batchNo">Item Batch No</label>
             <Select
               id="batchNo"
               instanceId="batchNo"
-              className="select-dropdown"
+              className="select-dropdown select-form-control"
               options={batchOptions}
               value={selectedBatch}
               onChange={handleBatchChange}
               isSearchable={true}
             />
+            </div>
           </div>
-          {selectedBatch && batchOccurrenceCount > 1 && (
+          <div className="col">
+          <div className="form-control mb-3">
+            <label htmlFor="jobCardNo">Sales Order No.</label>
+            <input
+              type="text"
+              className="form-control"
+              id="jobCardNo"
+              value={salesOrderNo}
+              onChange={handleSalesOrderChange}
+            />
+            </div>
+          </div>
+        </div>
+        {selectedBatch && batchOccurrenceCount > 1 && (
             <div className="col">
+              <div className="form-control mb-3">
               <label htmlFor="issueDocNum">Issue Doc Num</label>
               <Select
                 id="issueDocNum"
@@ -300,22 +316,13 @@ function Breakdown() {
                 onChange={handleIssueDocNumChange}
                 isSearchable={true}
               />
+              </div>
             </div>
           )}
-          <div className="col">
-            <label htmlFor="jobCardNo">Sales Order No.</label>
-            <input
-              type="text"
-              className="form-control form-control-text"
-              id="jobCardNo"
-              value={salesOrderNo}
-              onChange={handleSalesOrderChange}
-            />
-          </div>
-        </div>
 
         <div className="row pb-3">
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor="reasonForBreakdown">Reason for Breakdown</label>
             <Select
               id="reasonForBreakdown"
@@ -325,22 +332,25 @@ function Breakdown() {
               onChange={handleReasonChange}
               isSearchable={true}
             />
+            </div>
           </div>
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor="cuttingMachine">Cutting Machine</label>
             <input
               type="text"
-              className="form-control form-control-text"
+              className="form-control"
               id="cuttingMachine"
               value={cuttingMachine}
               onChange={handleCuttingMachineChange}
             />
+            </div>
           </div>
         </div>
 
         <div className="row pb-3">
           <div className="col">
-            <div className="form-floating mb-3">
+            <div className="form-floating form-control mb-3">
               <input
                 type="text"
                 pattern="[0-9]*"
@@ -357,14 +367,16 @@ function Breakdown() {
             </div>
           </div>
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor="bladeGRN">Blade Batch</label>
             <input
               type="text"
-              className="form-control form-control-text"
+              className="form-control"
               id="bladeGRN"
               value={bladeGRN}
               onChange={handleBladeGRNChange}
             />
+            </div>
           </div>
         </div>
       </div>

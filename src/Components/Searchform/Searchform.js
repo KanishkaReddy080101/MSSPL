@@ -200,6 +200,7 @@ const Searchform = () => {
       <div className="ps-5 pe-5 pt-5">
         <div className="row pb-3">
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor='type'>Product Type</label>
             <Select
               id="type"
@@ -210,8 +211,10 @@ const Searchform = () => {
               onChange={setSelectedTypeOption}
               placeholder="Type"
             />
+            </div>
           </div>
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor='grade'>Grade</label>
             <Select
               id="grade"
@@ -222,11 +225,13 @@ const Searchform = () => {
               onChange={setSelectedGradeOption}
               placeholder="Grade"
             />
+            </div>
           </div>
         </div>
 
         <div className="row pb-3">
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor='warehouseType'>Warehouse</label>
             <Select
               id="warehouseType"
@@ -237,8 +242,10 @@ const Searchform = () => {
               onChange={setSelectedWareHouseOption}
               placeholder="Warehouse"
             />
+            </div>
           </div>
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor='bin'>Bin</label>
             <Select
               id="bin"
@@ -249,18 +256,21 @@ const Searchform = () => {
               onChange={setSelectedBinOption}
               placeholder="Bin"
             />
+            </div>
           </div>
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor='batchNo'>Batch No.</label>
             <Select
               id="batchNo"
               instanceId="batchNo"
-              className={'select-form-control select-dropdown'}
+              className={'select-dropdown'}
               options={batchNoOptions}
               value={selectedBatchNoOption}
               onChange={setSelectedBatchNoOption}
               placeholder="Batch No."
             />
+            </div>
           </div>
         </div>
       </div>
