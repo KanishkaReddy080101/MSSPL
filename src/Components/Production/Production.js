@@ -27,6 +27,7 @@ const Production = () => {
   const [Width, setWidth] = useState("");
   const [Thickness, setThickness] = useState("");
   const [batchDetails, setBatchDetails] = useState([]);
+  const [bladeQuantity, setBladeQuantity] = useState('')
   const [productType, setProductType] = useState("");
   const [Weight, setWeight] = useState("")
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -95,6 +96,7 @@ const Production = () => {
           blade.BatchDetails.map((batch) => ({
             value: batch.BladeBatch,
             label: batch.BladeBatch,
+            batchQuantity: batch.Qty,
           }))
         );
       setBladeMasterOptions(bladeMasterOptions);
@@ -118,6 +120,12 @@ const Production = () => {
     } else {
       console.error("Selected Machine Item No option not found!");
     }
+    const selectedBatch = selectedOption.batchQuantity;
+  if (selectedBatch) {
+    setBladeQuantity(selectedBatch);
+  } else {
+    console.error("Selected batch quantity not found!");
+  }
   };
   
 
@@ -293,6 +301,7 @@ const Production = () => {
       <div className="ps-5 pe-5 pt-5">
         <div className="row pb-3">
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor="salesOrder">Sales Order No.</label>
             <Select
               id="salesOrder"
@@ -305,8 +314,10 @@ const Production = () => {
                 setSelectedLineOrderOption(null);
               }}
             />
+            </div>
           </div>
           <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor="batchNo">Item Batch No</label>
             <Select
               id="batchNo"
@@ -317,11 +328,14 @@ const Production = () => {
               onChange={handleBatchNoChange}
               placeholder={selectedBatchNoOption ? selectedBatchNoOption.label : "Select Batch No"}
             />
+            </div>
           </div>
         </div>
 
         <div className="row pb-3">
-          <div className="col">
+
+        <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor="lineNo">Line No</label>
             <Select
               id="lineNo"
@@ -332,7 +346,9 @@ const Production = () => {
               onChange={(e) => setSelectedLineOrderOption(e)}
               placeholder={selectedLinesOrderOption ? selectedLinesOrderOption.label : "Select Line No"}
             />
+            </div>
           </div>
+          
           <div className="col">
             <div className=" form-control mb-3">
               <label htmlFor="gadeName">Item Name</label>
@@ -349,6 +365,7 @@ const Production = () => {
 
         <div className="row pb-3">
         <div className="col">
+        <div className="form-control mb-3">
             <label htmlFor="cuttingMachine">Cutting Machine</label>
             <Select
               id="cuttingMachine"
@@ -359,6 +376,7 @@ const Production = () => {
               onChange={handleCuttingMachineChange}
               placeholder="Select Cutting Machine"
             />
+            </div>
           </div>
           <div className="col">
             <div className="form-control mb-3">
@@ -376,6 +394,7 @@ const Production = () => {
 
         <div className="row pb-3">
         <div className="col">
+        <div className="form-control mb-3">
             <label htmlFor="machineItemNo">Blade Name</label>
             <Select
               id="machineItemNo"
@@ -387,6 +406,7 @@ const Production = () => {
               placeholder="Select Blade Name"
               isDisabled={!selectedCuttingMachineOption}
             />
+            </div>
           </div>
           <div className="col">
             <div className="form-control mb-3">
@@ -404,6 +424,7 @@ const Production = () => {
 
         <div className="row pb-3">
         <div className="col">
+        <div className="form-control mb-3">
             <label htmlFor="bladeMaster">Blade Batch</label>
             <Select
               id="bladeMaster"
@@ -415,6 +436,7 @@ const Production = () => {
               placeholder="Select Blade Master"
               isDisabled={!selectedCuttingMachineOption}
             />
+            </div>
           </div>
           <div className="col">
             <div className="form-control mb-3">
@@ -428,6 +450,25 @@ const Production = () => {
               />
             </div>
           </div>
+        </div>
+      </div>
+      <div className="ps-5 pe-5 pt-3">
+        <div className="row pb-2">
+<div className="col">
+  <div className="form-control mb-3">
+  <label htmlFor="floatingInputweight">
+      Blade Quantity
+    </label>
+    <input
+      type="number"
+      className="form-control"
+      id="floatingInputweight"
+      value={bladeQuantity}
+      onChange={(e) => setBladeQuantity(e.target.value)}
+    />  
+  </div>
+</div>
+
         </div>
       </div>
 

@@ -9,9 +9,9 @@ import BlockWeightExceededPopup from './BlockWeightExceedsPopup';
 function ProductionEnd() {
   const { user } = useContext(UserContext);
   const [isMultiplePieces, setIsMultiplePieces] = useState(false);
-  const [numberOfPieces, setNumberOfPieces] = useState('');
+  const [numberOfPieces, setNumberOfPieces] = useState(1);
   const [isMultiplePieces2, setIsMultiplePieces2] = useState(false);
-  const [numberOfPieces2, setNumberOfPieces2] = useState('');
+  const [numberOfPieces2, setNumberOfPieces2] = useState(1);
   const [salesOrderOptions, setSalesOrderOptions] = useState('');
   const [selectedBatchNoOption, setSelectedBatchNoOption] = useState('');
   const [batchNoOptions, setBatchNoOptions] = useState([]);
@@ -29,6 +29,9 @@ function ProductionEnd() {
   const [Length, setLength] = useState("");
   const [Width, setWidth] = useState("");
   const [Thickness, setThickness] = useState("");
+  const [Length1, setLength1] = useState("");
+  const [Width1, setWidth1] = useState("");
+  const [Thickness1, setThickness1] = useState("");
   const [Weight, setWeight] = useState("")
   const [Dia2, setDia2] = useState(1);
   const [reasonOptions, setReasonOptions] = useState([]);
@@ -49,9 +52,21 @@ function ProductionEnd() {
   const [showResponse, setShowResponse] = useState(false)
   const [postResponse, setPostResponse] = useState('')
   const [showBlockWeightPopup, setShowBlockWeightPopup] = useState(false);
+  const [scrapBin, setScrapBin] = useState('')
   const [postData, setPostData] = useState('');
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  useEffect(() => {
+    if (parseInt(user?.Branch[0].BranchCode) === 3) {
+      setScrapBin('W001-SCRAP')
+    } else if (parseInt(user?.Branch[0].BranchCode) === 4) {
+      setScrapBin('W007-SCRAP')
+    } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
+      setScrapBin('W011-SCRAP')
+    } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
+      setScrapBin('W015-SCRAP')
+    }
+  }, []);
 
   const getBinOptions = async () => {
     try {
@@ -66,9 +81,9 @@ function ProductionEnd() {
       if (finishGood1 === true) {
         if (parseInt(user?.Branch[0].BranchCode) === 3) {
           setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
-        } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 4) {
           setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
-        } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
           setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
         } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
           setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
@@ -77,9 +92,9 @@ function ProductionEnd() {
       if (finishGood2 === true) {
         if (parseInt(user?.Branch[0].BranchCode) === 3) {
           setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
-        } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 4) {
           setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
-        } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
+        } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
           setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
         } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
           setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
@@ -99,9 +114,9 @@ function ProductionEnd() {
     if (finishGood1 === true) {
       if (parseInt(user?.Branch[0].BranchCode) === 3) {
         setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
-      } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 4) {
         setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
-      } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
         setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
       } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
         setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
@@ -115,9 +130,9 @@ function ProductionEnd() {
     if (finishGood2 === true) {
       if (parseInt(user?.Branch[0].BranchCode) === 3) {
         setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
-      } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 4) {
         setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
-      } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
+      } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
         setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
       } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
         setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
@@ -126,7 +141,6 @@ function ProductionEnd() {
     setSelectedBinOption2(e);
     }
   };
-
 const batchNo = async () => {
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`);
@@ -148,6 +162,9 @@ const batchNo = async () => {
         Length: param["Length"],
         Width: param["Width"],
         Thickness: param["Thickness"],
+        Length1: param["Length"],
+        Width1: param["Width"],
+        Thickness1: param["Thickness"],
         Weight: param["Weight"],
         Dia2: param["Dia"],
         Length2: param["Length"],
@@ -180,8 +197,6 @@ const fetchIssueDocNums = async (batchNo) => {
           label: item.ISSUEDOCNUM,
         }));
       setIssueDocNumOptions(filteredIssueDocNums);
-      console.log('docnum', issueDocNumOptions)
-      console.log(finishGood1)
       
     } else {
       console.error(
@@ -223,6 +238,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
       setWidth(selectedIssueDocNumDetails.Width);
       setLength(selectedIssueDocNumDetails.Length);
       setThickness(selectedIssueDocNumDetails.Thickness);
+      setWidth1(selectedIssueDocNumDetails.Width);
+      setLength1(selectedIssueDocNumDetails.Length);
+      setThickness1(selectedIssueDocNumDetails.Thickness);
       setWeight(selectedIssueDocNumDetails.Weight);
       setDia2(selectedIssueDocNumDetails.Dia);
       setWidth2(selectedIssueDocNumDetails.Width);
@@ -315,15 +333,14 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   const handleEndProduction = () => {
     if (selectedBatchNoOption) {
       const lineDetails = [];
-      
       for (let i = 0; i < (isMultiplePieces ? numberOfPieces : 1); i++) {
       lineDetails.push({
         Weight: Weight ? Weight : 1,
         Dia: Dia ? Dia : 1,
-        Length: Length ? Length : 1,
-        Thickness: Thickness ? Thickness : 1,
+        Length: Length1 ? Length1 : 1,
+        Thickness: Thickness1 ? Thickness1 : 1,
         Bin: selectedBinOption.value,
-        Width: Width ? Width : 1,
+        Width: Width1 ? Width1 : 1,
         NoofPieces: isMultiplePieces ? numberOfPieces : 1,
         FinishGood: finishGood1,
       });
@@ -343,6 +360,17 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
         });
       }
       }
+      //additional scrap
+    lineDetails.push({
+      Weight: parseFloat(blockWeight - ((Weight * numberOfPieces) + (Weight2 * numberOfPieces2))).toFixed(2),
+        Dia: Dia ? Dia : 1,
+        Length: Length === Length1 && Length === Length2 ? Length : parseFloat(Length - ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2))).toFixed(2),
+        Thickness: Thickness === Thickness1 && Thickness === Thickness2 ? Thickness : parseFloat(Thickness - ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2))).toFixed(2),
+        Bin: scrapBin,
+        Width: Width === Width1 && Width === Width2 ? Width : parseFloat(Width - ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2))).toFixed(2),
+        NoofPieces: 1,
+        FinishGood: false,
+    })
 
         const postData = {
           Branch: parseInt(user?.Branch[0].BranchCode),
@@ -360,7 +388,11 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
           ItemCode: grnNo,
           LineDetails: lineDetails,
         };
-        if ((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) <= blockWeight) {
+        if (((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) <= blockWeight) && 
+        ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2) <= Length) ||
+        ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2) <= Width) || 
+        ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2) <= Thickness)) {
+          console.log('post data', postData)
           setPostData(postData);
           setShowConfirmation(true);
         } else {
@@ -406,6 +438,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
     setLength('');
     setWidth('');
     setThickness('');
+    setLength1('');
+    setWidth1('');
+    setThickness1('');
     setWeight('');
     setDia2('');
     setLength2('');
@@ -438,13 +473,12 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   };
 
   const Checked1 = () => {
-    console.log(finishGood1);
     setFinishGood1(!finishGood1);
     if (parseInt(user?.Branch[0].BranchCode) === 3) {
       setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
-    } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 4) {
       setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
-    } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
       setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
     } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
       setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
@@ -452,28 +486,24 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   };
   
   const Checked2 = () => {
-    console.log(finishGood2);
     setFinishGood2(!finishGood2);
     if (parseInt(user?.Branch[0].BranchCode) === 3) {
       setSelectedBinOption2({ value: 'W005-100', label: 'W005-100'})
-    } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 4) {
       setSelectedBinOption2({ value: 'W009-100', label: 'W009-100'})
-    } else if (parseInt(user?.Branch[0].BranchCode) === 7) {
+    } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
       setSelectedBinOption2({ value: 'W013-100', label: 'W013-100'})
     } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
       setSelectedBinOption2({ value: 'W017-100', label: 'W017-100'})
     }
   };
 
-
-  
-  
-
   return (
     <>
       <div className="ps-5 pe-5 pt-5">
         <div className="row pb-3">
         <div className="col">
+          <div className="form-control mb-3">
             <label htmlFor="batchNo">Item Batch No</label>
             <Select
               id="batchNo"
@@ -484,22 +514,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               onChange={handleBatchNoChange}
               isSearchable={true}
             />
+            </div>
           </div>
           {/* {console.log(batchOccurrenceCount, 'batchoccrcont')} */}
-          {selectedBatchNoOption && (
-            <div className="col">
-              <label htmlFor="issueDocNum">Issue Doc Num</label>
-              <Select
-                id="issueDocNum"
-                instanceId="issueDocNum"
-                className="select-dropdown"
-                options={issueDocNumOptions}
-                value={selectedIssueDocNum}
-                onChange={handleIssueDocNumChange}
-                isSearchable={true}
-              />
-            </div>
-          )}
           <div className="col">
           <div className="form-control mb-3">
               <label htmlFor="floatingInputBin">Sales Order No.</label>
@@ -513,7 +530,22 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
             </div>
           </div>
         </div>
-
+{selectedBatchNoOption && (
+            <div className="col">
+            <div className="form-control mb-3">
+              <label htmlFor="issueDocNum">Issue Doc Num</label>
+              <Select
+                id="issueDocNum"
+                instanceId="issueDocNum"
+                className="select-dropdown"
+                options={issueDocNumOptions}
+                value={selectedIssueDocNum}
+                onChange={handleIssueDocNumChange}
+                isSearchable={true}
+              />
+              </div>
+            </div>
+          )}
         <div className="row pb-3">
           <div className="col">
             <div className="form-control mb-3">
@@ -655,9 +687,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputThickness1" 
               placeholder="Thickness" 
-              value={Thickness}
-              onChange={(e) => setThickness(e.target.value)}
-              disabled={Dia > 1.00}
+              value={Thickness1}
+              onChange={(e) => setThickness1(e.target.value)}
+              disabled={Length != Length1 || Length != Length2 || Width != Width1 || Width != Width2}
               />
               <label htmlFor="floatingInputThickness1" className="form-label">
                 Thickness
@@ -669,9 +701,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputWidth1" 
               placeholder="Width" 
-              value={Width}
-              onChange={(e) => setWidth(e.target.value)}
-              disabled={Dia > 1.00}
+              value={Width1}
+              onChange={(e) => setWidth1(e.target.value)}
+              disabled={Length != Length1 || Length != Length2 || Thickness != Thickness1 || Thickness != Thickness2}
               />
               <label htmlFor="floatingInputWidth1" className="form-label">
                 Width
@@ -683,9 +715,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputLength1" 
               placeholder="Length" 
-              value={Length}
-              onChange={(e) => setLength(e.target.value)}
-              
+              value={Length1}
+              onChange={(e) => setLength1(e.target.value)}
+              disabled={Width != Width1 || Width != Width2 || Thickness != Thickness1 || Thickness != Thickness2}
               />
               <label htmlFor="floatingInputLength1" className="form-label">
                 Length
@@ -773,7 +805,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               placeholder="Thickness" 
               value={Thickness2}
               onChange={(e) => setThickness2(e.target.value)}
-              disabled={Dia2 > 1}
+              disabled={Length != Length1 || Length != Length2 || Width != Width1 || Width != Width2}
               />
               <label htmlFor="floatingInputThickness2" className="form-label">
                 Thickness
@@ -788,7 +820,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               placeholder="Width" 
               value={Width2}
               onChange={(e) => setWidth2(e.target.value)}
-              disabled={Dia2 > 1}
+              disabled={Length != Length1 || Length != Length2 || Thickness != Thickness1 || Thickness != Thickness2}
               />
               <label htmlFor="floatingInputWidth2" className="form-label">
                 Width
@@ -802,7 +834,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               placeholder="Length" 
               value={Length2}
               onChange={(e) => setLength2(e.target.value)}
-              
+              disabled={Width != Width1 || Width != Width2 || Thickness != Thickness1 || Thickness != Thickness2}
               />
               <label htmlFor="floatingInputLength2" className="form-label">
                 Length
@@ -896,7 +928,54 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
       )}
 
 {showBlockWeightPopup && (
-        <BlockWeightExceededPopup onClose={handleCloseBlockWeightPopup} />
+        <div className="popup-overlay">
+      <div className="popup">
+        {((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) > blockWeight) &&        
+          <>
+          <h2>Block Weight Exceeded</h2>
+          <p>The total weight of the pieces exceeds the block weight.</p>
+          </>
+        }
+        {((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) <= blockWeight) && 
+        ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2) > Length) &&
+        (Length != Length1 || Length != Length2) &&
+          <>
+          <h2>Length Exceeded</h2>
+          <p>The total Length of the pieces exceeds the actual Length.</p>
+          </>
+        }
+        {((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) <= blockWeight) &&
+        ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2) > Width) &&
+        (Width != Width1 || Width != Width2) &&
+          <>
+          <h2>Width Exceeded</h2>
+          <p>The total Width of the pieces exceeds the actual Width.</p>
+          </>
+        }
+        {((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) <= blockWeight) &&
+        ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2) > Thickness) &&
+        (Thickness != Thickness1 || Thickness != Thickness2) &&
+          <>
+          <h2>Thickness Exceeded</h2>
+          <p>The total Thickness of the pieces exceeds the actual Thickness.</p>
+          </>
+        }
+        {((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) <= blockWeight) &&
+        (Length === Length1 && Length === Length2) &&
+        (Width === Width1 && Width === Width2) &&
+        (Thickness === Thickness1 && Thickness === Thickness2) &&
+          <>
+          <h2>Update Values</h2>
+          <p>You need to update the Line Item Length.</p>
+          </>
+        }
+        <div className="popup-buttons">
+          <button className="btn primary" onClick={handleCloseBlockWeightPopup}>
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
       )}
     </>
   );
