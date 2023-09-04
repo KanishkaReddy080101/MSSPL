@@ -1,10 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Select from "react-select";
 import { UserContext } from '@/UserContext';
-import { useRouter } from 'next/router';
 import ConfirmationPopup from "./ConfirmationPopup";
 import ConfirmationResponse from './ConfirmationResponse';
-import BlockWeightExceededPopup from './BlockWeightExceedsPopup';
 
 function ProductionEnd() {
   const { user } = useContext(UserContext);
@@ -45,6 +43,7 @@ function ProductionEnd() {
   const [selectedBinOption2, setSelectedBinOption2] = useState(null);
   const [finishGood1, setFinishGood1] = useState(false);
   const [finishGood2, setFinishGood2] = useState(false);
+  const [readyStockSale, setReadyStockSale] = useState(false)
   const [selectedIssueDocNum, setSelectedIssueDocNum] = useState(null);
     const [issueDocNumOptions, setIssueDocNumOptions] = useState([]);
   const [batchOccurrenceCount, setBatchOccurrenceCount] = useState('')
@@ -333,44 +332,57 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
   const handleEndProduction = () => {
     if (selectedBatchNoOption) {
       const lineDetails = [];
-      for (let i = 0; i < (isMultiplePieces ? numberOfPieces : 1); i++) {
-      lineDetails.push({
-        Weight: Weight ? Weight : 1,
-        Dia: Dia ? Dia : 1,
-        Length: Length1 ? Length1 : 1,
-        Thickness: Thickness1 ? Thickness1 : 1,
-        Bin: selectedBinOption.value,
-        Width: Width1 ? Width1 : 1,
-        NoofPieces: isMultiplePieces ? numberOfPieces : 1,
-        FinishGood: finishGood1,
-      });
-    }
-  
-      if (!Weight2 == '') {
-        for (let i = 0; i < (isMultiplePieces2 ? numberOfPieces2 : 1); i++) {
+      if (readyStockSale === false) {
+        for (let i = 0; i < (isMultiplePieces ? numberOfPieces : 1); i++) {
+          lineDetails.push({
+            Weight: Weight ? Weight : 1,
+            Dia: Dia ? Dia : 1,
+            Length: Length1 ? Length1 : 1,
+            Thickness: Thickness1 ? Thickness1 : 1,
+            Bin: selectedBinOption.value,
+            Width: Width1 ? Width1 : 1,
+            NoofPieces: isMultiplePieces ? numberOfPieces : 1,
+            FinishGood: finishGood1,
+          });
+        }
+      
+          if (!Weight2 == '') {
+            for (let i = 0; i < (isMultiplePieces2 ? numberOfPieces2 : 1); i++) {
+            lineDetails.push({
+              Weight: Weight2 ? Weight2 : 1,
+              Dia: Dia2 ? Dia2 : 1,
+              Length: Length2 ? Length2 : 1,
+              Thickness: Thickness2 ? Thickness2 : 1,
+              Bin: selectedBinOption2.value,
+              Width: Width2 ? Width2 : 1,
+              NoofPieces: isMultiplePieces2 ? numberOfPieces : 1,
+              FinishGood: finishGood2,
+            });
+          }
+          }
+          //additional scrap
         lineDetails.push({
-          Weight: Weight2 ? Weight2 : 1,
-          Dia: Dia2 ? Dia2 : 1,
-          Length: Length2 ? Length2 : 1,
-          Thickness: Thickness2 ? Thickness2 : 1,
-          Bin: selectedBinOption2.value,
-          Width: Width2 ? Width2 : 1,
-          NoofPieces: isMultiplePieces2 ? numberOfPieces : 1,
-          FinishGood: finishGood2,
-        });
+          Weight: parseFloat(blockWeight - ((Weight * numberOfPieces) + (Weight2 * numberOfPieces2))).toFixed(2),
+            Dia: Dia ? Dia : 1,
+            Length: Length === Length1 && Length === Length2 ? Length : parseFloat(Length - ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2))).toFixed(2),
+            Thickness: Thickness === Thickness1 && Thickness === Thickness2 ? Thickness : parseFloat(Thickness - ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2))).toFixed(2),
+            Bin: scrapBin,
+            Width: Width === Width1 && Width === Width2 ? Width : parseFloat(Width - ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2))).toFixed(2),
+            NoofPieces: 1,
+            FinishGood: false,
+        })
+      } else {
+        lineDetails.push({
+          Weight: blockWeight,
+              Dia: Dia,
+              Length: Length,
+              Thickness: Thickness,
+              Bin: selectedBinOption.value,
+              Width: Width,
+              NoofPieces: 1,
+              FinishGood: true,
+        })
       }
-      }
-      //additional scrap
-    lineDetails.push({
-      Weight: parseFloat(blockWeight - ((Weight * numberOfPieces) + (Weight2 * numberOfPieces2))).toFixed(2),
-        Dia: Dia ? Dia : 1,
-        Length: Length === Length1 && Length === Length2 ? Length : parseFloat(Length - ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2))).toFixed(2),
-        Thickness: Thickness === Thickness1 && Thickness === Thickness2 ? Thickness : parseFloat(Thickness - ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2))).toFixed(2),
-        Bin: scrapBin,
-        Width: Width === Width1 && Width === Width2 ? Width : parseFloat(Width - ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2))).toFixed(2),
-        NoofPieces: 1,
-        FinishGood: false,
-    })
 
         const postData = {
           Branch: parseInt(user?.Branch[0].BranchCode),
@@ -451,6 +463,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
     setSelectedBinOption2(null);
     setFinishGood1(false);
     setFinishGood2(false);
+    setReadyStockSale(false);
     setSelectedIssueDocNum(null);
 
       })
@@ -484,6 +497,51 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
       setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
     }
   };
+
+  const readyStockSaleChecked = async () => {
+    setReadyStockSale(!readyStockSale);
+    if (readyStockSale === false) {
+      if (parseInt(user?.Branch[0].BranchCode) === 3) {
+        setSelectedBinOption({ value: 'W005-100', label: 'W005-100'})
+      } else if (parseInt(user?.Branch[0].BranchCode) === 4) {
+        setSelectedBinOption({ value: 'W009-100', label: 'W009-100'})
+      } else if (parseInt(user?.Branch[0].BranchCode) === 5) {
+        setSelectedBinOption({ value: 'W013-100', label: 'W013-100'})
+      } else if (parseInt(user?.Branch[0].BranchCode) === 6) {
+        setSelectedBinOption({ value: 'W017-100', label: 'W017-100'})
+      }
+    setLength2(0);
+    setWidth2(0);
+    setThickness2(0);
+    setWeight2(0);
+    } else if (selectedIssueDocNum) {
+        try {
+          const issueDocNumDetailsResponse = await fetch(
+            process.env.NEXT_PUBLIC_PRODUCTIONISSUE_API_ENDPOINT + `${parseInt(user?.Branch[0].BranchCode)}`
+          );
+          const issueDocNumDetailsResult = await issueDocNumDetailsResponse.json();
+    
+          const selectedIssueDocNumDetails = issueDocNumDetailsResult.find(
+            (item) => item.ISSUEDOCNUM === selectedIssueDocNum.value
+          );
+    
+          if (selectedIssueDocNumDetails) {
+      setWidth1(selectedIssueDocNumDetails.Width);
+      setLength1(selectedIssueDocNumDetails.Length);
+      setThickness1(selectedIssueDocNumDetails.Thickness);
+      setWeight(selectedIssueDocNumDetails.Weight);
+      setDia2(selectedIssueDocNumDetails.Dia);
+      setWidth2(selectedIssueDocNumDetails.Width);
+      setLength2(selectedIssueDocNumDetails.Length);
+      setThickness2(selectedIssueDocNumDetails.Thickness);
+      setWeight2(selectedIssueDocNumDetails.Weight);
+    
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+  }
   
   const Checked2 = () => {
     setFinishGood2(!finishGood2);
@@ -681,7 +739,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputDia1" 
               placeholder="Dia" 
-              value={Dia}
+              value={readyStockSale === true ? Dia : Dia}
               onChange={(e) => setDia(e.target.value)}
               disabled
               />
@@ -695,7 +753,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputThickness1" 
               placeholder="Thickness" 
-              value={Thickness1}
+              value={readyStockSale === true ? Thickness : Thickness1}
               onChange={(e) => setThickness1(e.target.value)}
               disabled={Length != Length1 || Length != Length2 || Width != Width1 || Width != Width2}
               />
@@ -709,7 +767,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputWidth1" 
               placeholder="Width" 
-              value={Width1}
+              value={readyStockSale === true ? Width : Width1}
               onChange={(e) => setWidth1(e.target.value)}
               disabled={Length != Length1 || Length != Length2 || Thickness != Thickness1 || Thickness != Thickness2}
               />
@@ -723,7 +781,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputLength1" 
               placeholder="Length" 
-              value={Length1}
+              value={readyStockSale === true ? Length : Length1}
               onChange={(e) => setLength1(e.target.value)}
               disabled={Width != Width1 || Width != Width2 || Thickness != Thickness1 || Thickness != Thickness2}
               />
@@ -750,8 +808,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputWeight1" 
               placeholder="Weight" 
-              value={Weight}
+              value={readyStockSale === true ? blockWeight : Weight}
               onChange={(e) => setWeight(e.target.value)}
+              disabled={readyStockSale === true}
               />
               <label htmlFor="floatingInputWeight1" className="form-label">
                 Weight(Kg)
@@ -779,15 +838,24 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
                 No. Of Pieces
               </label>
             </div>
-
+            <div className="check-box">
             <div className="chck-box">
               <input type="checkbox" className="" id="finishGood1Checkbox" 
-              checked={finishGood1}
+              checked={readyStockSale === true ? true : finishGood1}
               onChange={Checked1}/>
               <label htmlFor="finishGood1Checkbox" className=""
               >
                 Finish Good
               </label>
+            </div>
+            <div className="chck-box">
+              <input type="checkbox" className="" id="readyStockSaleCheckbox" checked={readyStockSale}
+              onChange={readyStockSaleChecked}/>
+              <label htmlFor="readyStockSaleCheckbox" className=""
+              >
+                Ready Stock Sale
+              </label>
+            </div>
             </div>
           </div>
           <div className="col align-self-center"></div>
@@ -797,7 +865,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputDia2" 
               placeholder="Dia" 
-              value={Dia2}
+              value={readyStockSale === true ? Dia : Dia2}
               onChange={(e) => setDia2(e.target.value)}
               disabled
               />
@@ -811,7 +879,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputThickness2" 
               placeholder="Thickness" 
-              value={Thickness2}
+              value={readyStockSale === true ? Thickness : Thickness2}
               onChange={(e) => setThickness2(e.target.value)}
               disabled={Length != Length1 || Length != Length2 || Width != Width1 || Width != Width2}
               />
@@ -826,7 +894,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputWidth2" 
               placeholder="Width" 
-              value={Width2}
+              value={readyStockSale === true ? Width : Width2}
               onChange={(e) => setWidth2(e.target.value)}
               disabled={Length != Length1 || Length != Length2 || Thickness != Thickness1 || Thickness != Thickness2}
               />
@@ -840,7 +908,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputLength2" 
               placeholder="Length" 
-              value={Length2}
+              value={readyStockSale === true ? Length : Length2}
               onChange={(e) => setLength2(e.target.value)}
               disabled={Width != Width1 || Width != Width2 || Thickness != Thickness1 || Thickness != Thickness2}
               />
@@ -867,8 +935,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               className="form-control" 
               id="floatingInputWeight2" 
               placeholder="Weight" 
-              value={Weight2}
+              value={readyStockSale === true ? blockWeight : Weight2}
               onChange={(e) => setWeight2(e.target.value)}
+              disabled={readyStockSale === true}
               />
               <label htmlFor="floatingInputWeight2" className="form-label">
                 Weight(Kg)
@@ -905,6 +974,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
                 Finish Good
               </label>
             </div>
+            
           </div>
         </div>
 

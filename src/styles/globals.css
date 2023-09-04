@@ -525,6 +525,11 @@ tr:hover {
   color: #b22e22;
 }
 
+.check-box {
+  display: flex;
+  justify-content: space-between;
+}
+
 
 
 @media (max-width: 768px) {
