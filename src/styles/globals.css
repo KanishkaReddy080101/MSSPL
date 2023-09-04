@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+* {
+  font-family: 'Inconsolata';
+  font-weight: 500;
+}
+
 html {
   min-height: 95%;
   display: flex;
@@ -346,6 +353,15 @@ text-align: center;
 
 .form-label {
   z-index: 0 !important;
+  font-size: 15px;
+}
+
+.login-head {
+  font-size: 18px;
+}
+
+.login-heading {
+  font-size: 17px;
 }
 
 .select-dropdown {
@@ -412,6 +428,10 @@ text-align: center;
   -moz-appearance: none;
   appearance: none;
   border-radius: 0.375rem;
+}
+
+.balance-piece {
+  margin-left: -15px;
 }
 
 .top-space{
@@ -523,6 +543,7 @@ tr:hover {
 
 .last-cell {
   color: #b22e22;
+  font-weight: 800;
 }
 
 .check-box {

@@ -32,11 +32,11 @@ function Login() {
                     <div className="card-body p-md-5 mx-md-4">
                       <div className="text-center pb-2">
                         <Image src="/logo.png" width={115} height={115} alt="logo" />
-                        <h6 className="mt-1 mb-5 pb-1">Multiple Special Steel Pvt. Ltd.</h6>
+                        <h6 className="mt-1 mb-5 pb-1 login-head">Multiple Special Steel Pvt. Ltd.</h6>
                       </div>
 
                       <form onSubmit={(e) => loginUser(e, username, password)}>
-                        <p>Please login to your account</p>
+                        <p className='login-heading'>Please login to your account</p>
 
                         <div className="form-floating mb-3">
                           <input

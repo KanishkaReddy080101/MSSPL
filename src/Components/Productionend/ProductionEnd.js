@@ -723,12 +723,12 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
 
       <div className="ps-5 pe-5 pt-5">
         <div className="row pb-2">
-          <div className="col">
-            <p className="text-center">Balance Piece -1</p>
+          <div className="col text-center">
+            <p className="text-center balance-piece">Balance Piece - 1</p>
           </div>
-          <div className="col"></div>
-          <div className="col">
-            <p className="text-center">Balance Piece -2</p>
+
+          <div className="col text-center">
+            <p className="text-center">Balance Piece - 2</p>
           </div>
         </div>
 
