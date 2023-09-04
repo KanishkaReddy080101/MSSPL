@@ -55,7 +55,7 @@ function ProductionEnd() {
   const [scrapBin, setScrapBin] = useState('')
   const [postData, setPostData] = useState('');
   const currentDate = new Date().toISOString().slice(0, 10);
-  const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
   useEffect(() => {
     if (parseInt(user?.Branch[0].BranchCode) === 3) {
       setScrapBin('W001-SCRAP')
@@ -538,6 +538,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="floatingInputBin">Sales Order No.</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="floatingInputBin"
                 value={salesOrderOptions}
@@ -551,6 +552,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="floatingInputGrn">Item Code</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="floatingInputGrn"
                 value={grnNo}
@@ -563,6 +565,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="blockWeight">Block Weight</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="blockWeight"
                 value={blockWeight}
@@ -578,6 +581,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="cuttingMachine">Cutting Machine</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="cuttingMachine"
                 value={cuttingMachine}
@@ -590,6 +594,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="gadeName">Grade Name</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="gadeName"
                 value={gradeName}
@@ -605,6 +610,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="bladeBatch">Blade Batch</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="bladeBatch"
                 value={BladeBatch}
@@ -617,6 +623,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="floatingInputWareHouse">Warehouse</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="floatingInputWareHouse"
                 value={warehouse}
@@ -632,6 +639,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="startDate">Start Date</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="startDate"
                 value={startDate}
@@ -644,6 +652,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               <label htmlFor="startTime">Start Time</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="startTime"
                 value={startTime}

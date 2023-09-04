@@ -19,7 +19,7 @@ function Breakdown() {
   const [batchOccurrenceCount, setBatchOccurrenceCount] = useState('')
   const [showConfirmation, setShowConfirmation] = useState(false);
   const currentDate = new Date().toISOString().slice(0, 10);
-  const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
     const [showResponse, setShowResponse] = useState(false)
   const [postResponse, setPostResponse] = useState('')
   const [postData, setPostData] = useState({
@@ -295,6 +295,7 @@ function Breakdown() {
             <label htmlFor="jobCardNo">Sales Order No.</label>
             <input
               type="text"
+              readOnly
               className="form-control"
               id="jobCardNo"
               value={salesOrderNo}
@@ -339,6 +340,7 @@ function Breakdown() {
             <label htmlFor="cuttingMachine">Cutting Machine</label>
             <input
               type="text"
+              readOnly
               className="form-control"
               id="cuttingMachine"
               value={cuttingMachine}
@@ -371,6 +373,7 @@ function Breakdown() {
             <label htmlFor="bladeGRN">Blade Batch</label>
             <input
               type="text"
+              readOnly
               className="form-control"
               id="bladeGRN"
               value={bladeGRN}

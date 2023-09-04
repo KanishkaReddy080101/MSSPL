@@ -35,7 +35,7 @@ const Production = () => {
   const [postResponse, setPostResponse] = useState('')
   const { user } = useContext(UserContext);
   const currentDate = new Date().toISOString().slice(0, 10);
-  const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
   const [postData, setPostData] = useState({
     Branch: "",
     PostingDate: "",
@@ -354,6 +354,7 @@ const Production = () => {
               <label htmlFor="gadeName">Item Name</label>
               <input
                 id="ItemName"
+                readOnly
                 type="text"
                 className="form-control"
                 value={gradeName}
@@ -383,6 +384,7 @@ const Production = () => {
               <label htmlFor="floatingInputGrn">Item Code</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="floatingInputGrn"
                 value={grnNo}
@@ -413,6 +415,7 @@ const Production = () => {
               <label htmlFor="floatingInputBin">Bin Location</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="floatingInputBin"
                 value={bin}
@@ -443,6 +446,7 @@ const Production = () => {
               <label htmlFor="floatingInputWareHouse">Warehouse</label>
               <input
                 type="text"
+                readOnly
                 className="form-control"
                 id="floatingInputWareHouse"
                 value={warehouse}
@@ -457,10 +461,11 @@ const Production = () => {
 <div className="col">
   <div className="form-control mb-3">
   <label htmlFor="floatingInputweight">
-      Blade Quantity
+      Blade Life
     </label>
     <input
       type="number"
+      readOnly
       className="form-control"
       id="floatingInputweight"
       value={bladeQuantity}
@@ -484,6 +489,7 @@ const Production = () => {
             <div className="form-floating mb-3">
               <input
                 type="number"
+                readOnly
                 className="form-control"
                 id="floatingInputDia"
                 placeholder="Dia"
@@ -501,6 +507,7 @@ const Production = () => {
             <div className="form-floating mb-3">
               <input
                 type="number"
+                readOnly
                 className="form-control"
                 id="floatingInputThickness"
                 placeholder="Thickness"
@@ -517,6 +524,7 @@ const Production = () => {
             <div className="form-floating mb-3">
               <input
                 type="number"
+                readOnly
                 className="form-control"
                 id="floatingInputWidth"
                 placeholder="Width"
@@ -533,6 +541,7 @@ const Production = () => {
             <div className="form-floating mb-3">
               <input
                 type="number"
+                readOnly
                 className="form-control"
                 id="floatingInputLength"
                 placeholder="Length"
@@ -559,6 +568,7 @@ const Production = () => {
             <div className="form-floating mb-3">
               <input
                 type="number"
+                readOnly
                 className="form-control"
                 id="floatingInputweight"
                 placeholder="Weight"
