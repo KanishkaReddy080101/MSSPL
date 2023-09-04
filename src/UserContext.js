@@ -37,13 +37,18 @@ export const UserProvider = ({ children }) => {
       alert("An error occurred while logging in: " + error.message);
     }
   }
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   const handleLogout = () => {
     setUser(null);
     router.push('/login');
   };
-  // useEffect (() => {
-  //   loginUser()
-  // }, []) 
+  
 
   return (
     <UserContext.Provider value={{ user, loginUser, handleLogout }}>
