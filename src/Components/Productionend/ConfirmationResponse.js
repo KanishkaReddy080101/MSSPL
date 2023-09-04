@@ -11,7 +11,7 @@ const ConfirmationResponse = ({ data, onOK }) => {
       for (let index = 0; index < lineDetails.length; index++) {
         const result = lineDetails[index];
         lineDetailRows.push(
-          <tr key={index} className={index === lineDetails.length - 1 ? "last-row" : ""}>
+          <tr key={index} className={lineDetails.length > 1 && index === lineDetails.length - 1 ? "last-row" : ""}>
             <td>{result.FinishGood}</td>
             <td className="last-cell">{result.GoodsReceiptBatchNo}</td>
             <td>{result.BIN}</td>
