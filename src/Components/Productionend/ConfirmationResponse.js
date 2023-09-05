@@ -36,8 +36,8 @@ const ConfirmationResponse = ({ data, onOK }) => {
           {data.statusCode === 0 && (
             <div className="search-results">
               <div className="results">
-                <div className="top-head">
-                  <button className="close-button" onClick={onOK}>
+                <div className="top-head-end">
+                  <button className="close-button-end" onClick={onOK}>
                     Close
                   </button>
                 </div>
