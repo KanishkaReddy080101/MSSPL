@@ -40,7 +40,7 @@ const ConfirmationResponse = ({ data, onOK }) => {
                     "confirmationContent"
                 );
                 popupContent.innerHTML =
-                    "<p>Status Message is Null / Something went Wrong. </p>";
+                    "<p>Something went Wrong. Contact your Admin </p>";
             }
         }
     }, []);
