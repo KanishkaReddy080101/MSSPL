@@ -755,7 +755,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               placeholder="Thickness" 
               value={readyStockSale === true ? Thickness : Thickness1}
               onChange={(e) => setThickness1(e.target.value)}
-              disabled={Length != Length1 || Length != Length2 || Width != Width1 || Width != Width2}
+              disabled={Length != Length1 || Length != Length2 || Width != Width1 || Width != Width2 || Dia > 1.00}
               />
               <label htmlFor="floatingInputThickness1" className="form-label">
                 Thickness
@@ -769,7 +769,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               placeholder="Width" 
               value={readyStockSale === true ? Width : Width1}
               onChange={(e) => setWidth1(e.target.value)}
-              disabled={Length != Length1 || Length != Length2 || Thickness != Thickness1 || Thickness != Thickness2}
+              disabled={Length != Length1 || Length != Length2 || Thickness != Thickness1 || Thickness != Thickness2 || Dia > 1.00}
               />
               <label htmlFor="floatingInputWidth1" className="form-label">
                 Width
@@ -881,7 +881,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               placeholder="Thickness" 
               value={readyStockSale === true ? Thickness : Thickness2}
               onChange={(e) => setThickness2(e.target.value)}
-              disabled={Length != Length1 || Length != Length2 || Width != Width1 || Width != Width2}
+              disabled={Length != Length1 || Length != Length2 || Width != Width1 || Width != Width2 || Dia2 > 1.00}
               />
               <label htmlFor="floatingInputThickness2" className="form-label">
                 Thickness
@@ -896,7 +896,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               placeholder="Width" 
               value={readyStockSale === true ? Width : Width2}
               onChange={(e) => setWidth2(e.target.value)}
-              disabled={Length != Length1 || Length != Length2 || Thickness != Thickness1 || Thickness != Thickness2}
+              disabled={Length != Length1 || Length != Length2 || Thickness != Thickness1 || Thickness != Thickness2 || Dia2 > 1.00}
               />
               <label htmlFor="floatingInputWidth2" className="form-label">
                 Width
