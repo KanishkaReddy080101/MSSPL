@@ -361,16 +361,22 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
           }
           }
           //additional scrap
-        lineDetails.push({
-          Weight: parseFloat(blockWeight - ((Weight * numberOfPieces) + (Weight2 * numberOfPieces2))).toFixed(2),
+          const remainingWeight = parseFloat(blockWeight - ((Weight * numberOfPieces) + (Weight2 * numberOfPieces2))).toFixed(2);
+          const remainingLength = Length === Length1 && Length === Length2 ? Length : parseFloat(Length - ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2))).toFixed(2);
+          const remainingThickness = Thickness === Thickness1 && Thickness === Thickness2 ? Thickness : parseFloat(Thickness - ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2))).toFixed(2);
+          const remainingWidth = Width === Width1 && Width === Width2 ? Width : parseFloat(Width - ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2))).toFixed(2);
+          
+          lineDetails.push({
+            Weight: parseFloat(remainingWeight).toFixed(2),
             Dia: Dia ? Dia : 1,
-            Length: Length === Length1 && Length === Length2 ? Length : parseFloat(Length - ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2))).toFixed(2),
-            Thickness: Thickness === Thickness1 && Thickness === Thickness2 ? Thickness : parseFloat(Thickness - ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2))).toFixed(2),
+            Length: remainingLength,
+            Thickness: remainingThickness,
             Bin: scrapBin,
-            Width: Width === Width1 && Width === Width2 ? Width : parseFloat(Width - ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2))).toFixed(2),
+            Width: remainingWidth,
             NoofPieces: 1,
             FinishGood: false,
-        })
+          });
+          
       } else {
         lineDetails.push({
           Weight: blockWeight,
