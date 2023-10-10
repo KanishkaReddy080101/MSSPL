@@ -4,12 +4,14 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { UserContext } from '@/UserContext';
 import "../styles/Home.module.css";
+import { logger } from "@/../logger";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [branchCode, setBranchCode] = useState("");
   const { user, loginUser } = useContext(UserContext);
+  logger.info("login page called")
 
   console.log(user);
 

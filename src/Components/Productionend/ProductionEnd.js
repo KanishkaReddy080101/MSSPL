@@ -55,6 +55,21 @@ function ProductionEnd() {
   const [postData, setPostData] = useState('');
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+  // const [txtFile, setTxtFile] = useState('')
+ 
+// const readFile = async () => {
+// try {
+//   const fileContent = await fetch('https://f004.backblazeb2.com/file/assist-public/bay01-blr.txt');
+//       const result = await fileContent.text();
+//       console.log('read txt', result)
+// } catch (error) {
+//   console.log("error", error);
+// }
+// }
+// useEffect(() => {
+//   readFile();
+// }, []);
+
   useEffect(() => {
     if (parseInt(user?.Branch[0].BranchCode) === 3) {
       setScrapBin('W001-SCRAP')
