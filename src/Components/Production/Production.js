@@ -33,6 +33,7 @@ const Production = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showResponse, setShowResponse] = useState(false)
   const [postResponse, setPostResponse] = useState('')
+  const [productionLogged, setProductionLogged] = useState(false);
   const { user } = useContext(UserContext);
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -48,6 +49,38 @@ const Production = () => {
     LineNum: "",
     BatchNum: "",
   });
+
+  const logProductionStartToNewRelic = (username, productionDetails) => {
+    if (!productionLogged) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Api-Key", process.env.NEXT_PUBLIC_NEWRELIC_API_KEY);
+  
+      var logPayload = {
+        timestamp: Date.now(),
+        message: `User '${username}' started production with details: ${JSON.stringify(productionDetails)}`,
+        logtype: "productionlogs",
+        service: "production-service",
+        hostname: "production.example.com"
+      };
+  
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(logPayload),
+        redirect: 'follow'
+      };
+  
+      fetch(process.env.NEXT_PUBLIC_NEWRELIC_LOG_ENDPOINT, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          console.log(result);
+          setProductionLogged(true);
+        })
+        .catch(error => console.error('Error logging production start to New Relic:', error));
+    }
+  };
+  
 
   useEffect(() => {
     fetchCuttingMachines();
@@ -83,6 +116,7 @@ const Production = () => {
     setSelectedMachineItemNoOption(null);
   };
   
+  
   const handleMachineItemNoChange = (selectedOption) => {
     setSelectedMachineItemNoOption(selectedOption);
     updateBladeMasterOptions(selectedCuttingMachineOption, selectedOption);
@@ -109,27 +143,21 @@ const Production = () => {
   
   const handleBladeMasterChange = (selectedOption) => {
     setSelectedBladeMasterOption(selectedOption);
-    
-    const selectedValue = selectedOption.value;
   
-    const selectedMachineItemNoOption = machineItemNoOptions.find(
-      (option) => option.value === selectedValue
-    );
-      if (selectedMachineItemNoOption) {
-      setSelectedMachineItemNoOption(selectedMachineItemNoOption);
-    } else {
-      console.error("Selected Machine Item No option not found!");
-    }
+    // const selectedMachineItemNoOption = machineItemNoOptions.find((option) => option.value === selectedValue);
+    // if (selectedMachineItemNoOption) {
+    //   setSelectedMachineItemNoOption(selectedMachineItemNoOption);
+    // } else {
+    //   console.error("Selected Machine Item No option not found!");
+    // }
+  
     const selectedBatch = selectedOption.batchQuantity;
-  if (selectedBatch) {
-    setBladeQuantity(selectedBatch);
-  } else {
-    console.error("Selected batch quantity not found!");
-  }
+    if (selectedBatch) {
+      setBladeQuantity(selectedBatch);
+    } else {
+      console.error("Selected batch quantity not found!");
+    }
   };
-  
-
-  
   
   const salesOrder = async () => {
     try {
@@ -237,6 +265,8 @@ const Production = () => {
         LineNum: selectedLinesOrderOption ? selectedLinesOrderOption.value : "",
         BatchNum: selectedBatchNoOption ? selectedBatchNoOption.value : "",
       }));
+
+      logProductionStartToNewRelic(user.Name, postData);
     } else {
       console.error("Please select all required options before starting production.");
     }

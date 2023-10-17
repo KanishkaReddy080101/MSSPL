@@ -51,24 +51,11 @@ function ProductionEnd() {
   const [showResponse, setShowResponse] = useState(false)
   const [postResponse, setPostResponse] = useState('')
   const [showBlockWeightPopup, setShowBlockWeightPopup] = useState(false);
+  const [productionLogged, setProductionLogged] = useState(false);
   const [scrapBin, setScrapBin] = useState('')
   const [postData, setPostData] = useState('');
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-  // const [txtFile, setTxtFile] = useState('')
- 
-// const readFile = async () => {
-// try {
-//   const fileContent = await fetch('https://f004.backblazeb2.com/file/assist-public/bay01-blr.txt');
-//       const result = await fileContent.text();
-//       console.log('read txt', result)
-// } catch (error) {
-//   console.log("error", error);
-// }
-// }
-// useEffect(() => {
-//   readFile();
-// }, []);
 
   useEffect(() => {
     if (parseInt(user?.Branch[0].BranchCode) === 3) {
@@ -81,6 +68,37 @@ function ProductionEnd() {
       setScrapBin('W015-SCRAP')
     }
   }, []);
+
+  const logProductionStartToNewRelic = (username, productionDetails) => {
+    if (!productionLogged) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Api-Key", process.env.NEXT_PUBLIC_NEWRELIC_API_KEY);
+  
+      var logPayload = {
+        timestamp: Date.now(),
+        message: `User '${username}' end production with details: ${JSON.stringify(productionDetails)}`,
+        logtype: "productionlogs",
+        service: "production-service",
+        hostname: "production.example.com"
+      };
+  
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(logPayload),
+        redirect: 'follow'
+      };
+  
+      fetch(process.env.NEXT_PUBLIC_NEWRELIC_LOG_ENDPOINT, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          console.log(result);
+          setProductionLogged(true);
+        })
+        .catch(error => console.error('Error logging production start to New Relic:', error));
+    }
+  };
 
   const getBinOptions = async () => {
     try {
@@ -431,6 +449,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
         } else {
           setShowBlockWeightPopup(true);
         }
+        logProductionStartToNewRelic(user.Name, postData);
     } else {
       console.error("Please select all required options before stopping production.");
     }

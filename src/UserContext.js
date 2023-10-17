@@ -6,8 +6,37 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const router = useRouter();
   const API_URL = '';
+  const logUserLoginToNewRelic = (username) => {
+    const currentTimestamp = new Date().toISOString();
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Api-Key", process.env.NEXT_PUBLIC_NEWRELIC_API_KEY);
+
+  var logPayload = {
+    timestamp: currentTimestamp,
+      message: `User '${username}' logged in`,
+      logtype: "accesslogs",
+      service: "login-service",
+      hostname: "login.example.com"
+    };
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify(logPayload),
+      redirect: 'follow'
+    };
+
+    fetch(process.env.NEXT_PUBLIC_NEWRELIC_LOG_ENDPOINT, requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.error('Error logging to New Relic:', error));
+  };
+
   async function loginUser(event, username, password) {
     event.preventDefault();
+    logUserLoginToNewRelic(username);
     console.log(event)
 
     try {

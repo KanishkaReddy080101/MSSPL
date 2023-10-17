@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Select from 'react-select';
 import { UserContext } from '@/UserContext';
+import { saveAs } from 'file-saver';
+import XlsxPopulate from 'xlsx-populate';
 
 const Searchform = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [warehouseOptions, setWareHouseOptions] = useState([]);
   const [typeOptions, setTypeOptions] = useState([
     { value: 'FLATS', label: 'FLATS' },
@@ -19,6 +21,38 @@ const Searchform = () => {
   const [selectedBatchNoOption, setSelectedBatchNoOption] = useState(null)
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const [exportLogged, setExportLogged] = useState(false);
+
+  const logUserExportToNewRelic = (username, searchCriteria) => {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Api-Key", process.env.NEXT_PUBLIC_NEWRELIC_API_KEY);
+
+      var logPayload = {
+        timestamp: Date.now(),
+        message: `User '${username}' ${searchCriteria}`,
+        logtype: "exportlogs",
+        service: "search-service",
+        hostname: "search.example.com"
+      };
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(logPayload),
+        redirect: 'follow'
+      };
+
+      fetch(process.env.NEXT_PUBLIC_NEWRELIC_LOG_ENDPOINT, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          console.log(result);
+          setExportLogged(true);
+        })
+        .catch(error => console.error('Error logging export to New Relic:', error));
+    
+  };
+
 
   useEffect(() => {
     fetchOptions();
@@ -68,26 +102,6 @@ const Searchform = () => {
     setBinOptions(uniqueBinOptions);
     setBatchNoOptions(uniqueBatchNoOptions);
 
-      // const warehouse = responseObject.map((param) => ({
-      //   value: param['WhsCode'],
-      //   label: param['WhsCode'],
-      // }));
-      // setWareHouseOptions(warehouse);
-      // const grades = responseObject.map((param) => ({
-      //   value: param['ItemName'],
-      //   label: param['ItemName'],
-      // }));
-      // setGradeOptions(grades);
-      // const bins = responseObject.map((param) => ({
-      //   value: param['BinNo'],
-      //   label: param['BinNo'],
-      // }));
-      // setBinOptions(bins);
-      // const batchNo = responseObject.map((param) => ({
-      //   value: param['BatchNum'],
-      //   label: param['BatchNum'],
-      // }));
-      // setBatchNoOptions(batchNo);
     } catch (error) {
       console.log('error', error);
     }
@@ -168,6 +182,15 @@ const Searchform = () => {
           return false;
         }
       }
+      const searchCriteria = [
+        `Type: ${selectedTypeOption ? selectedTypeOption.value : 'All'}`,
+        `Grade: ${selectedGradeOption ? selectedGradeOption.value : 'All'}`,
+        `Warehouse: ${selectedWareHouseOption ? selectedWareHouseOption.value : 'All'}`,
+        `Bin: ${selectedBinOption ? selectedBinOption.value : 'All'}`,
+        `Batch No: ${selectedBatchNoOption ? selectedBatchNoOption.value : 'All'}`
+      ].filter(criteria => criteria !== 'All').join(', ');
+  
+      logUserExportToNewRelic(user.UserID, `Searched Results with Criteria: ${searchCriteria}`);
       return true;
     });
     setSearchResults(results);
@@ -192,6 +215,63 @@ const Searchform = () => {
   document.getElementById('floatingInputWeight1').value = '';
   document.getElementById('floatingInputWeight2').value = '';
   };
+
+  const saveAsExcel = async () => {
+    if (searchResults.length > 0) {
+      try {
+        logUserExportToNewRelic(user.UserID, "Exported the search Results");
+        const header = [
+          'Type',
+          'Item Code',
+          'Item Name',
+          'Batch No.',
+          'Warehouse Code',
+          'Bin No',
+          'Branch',
+          'Weight',
+          'Dia',
+          'Thickness',
+          'Width',
+          'Length'
+        ];
+
+        const sheetData = searchResults.map((result) => [
+          result.Type,
+          result.ItemCode,
+          result.ItemName,
+          result.BatchNum,
+          result.WhsCode,
+          result.BinNo,
+          result.Branch,
+          result.Weight,
+          result.Dia,
+          result.Thickness,
+          result.Width,
+          result.Length
+        ]);
+
+        sheetData.unshift(header);
+
+        XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+          const sheet1 = workbook.sheet(0);
+          const totalColumns = sheetData[0].length;
+
+          sheet1.cell('A1').value(sheetData);
+          const range = sheet1.usedRange();
+          const endColumn = String.fromCharCode(64 + totalColumns);
+          sheet1.row(1).style('bold', true);
+          sheet1.range('A1:' + endColumn + '1').style('fill', 'BFBFBF');
+          range.style('border', true);
+          return workbook.outputAsync().then((res) => {
+            saveAs(res, 'search_results.xlsx');
+          });
+        });
+      } catch (error) {
+        console.error('Error exporting to Excel:', error);
+      }
+    }
+  };
+  
 
   return (
     <>
@@ -355,9 +435,12 @@ const Searchform = () => {
             <div className='top-head'>
               <h3>Search Results</h3>
               <p>Total Pieces: {searchResults.length}</p>
+              <div>
+              <button className='export-button' onClick={saveAsExcel}>Export</button>
               <button className="close-button" onClick={() => setShowResults(false)}>
                 Close
               </button>
+              </div>
             </div>
             {searchResults.length > 0 ? (
               <table>

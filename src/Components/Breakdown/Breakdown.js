@@ -17,6 +17,7 @@ function Breakdown() {
   const [selectedIssueDocNum, setSelectedIssueDocNum] = useState(null);
   const [issueDocNumOptions, setIssueDocNumOptions] = useState([]);
   const [batchOccurrenceCount, setBatchOccurrenceCount] = useState('')
+  const [productionLogged, setProductionLogged] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -34,14 +35,37 @@ function Breakdown() {
     ReasonBreakdown: "",
     Sqm:"",
   });
-
-  let GET_PRODUCTIONISSUE_API="http://localhost:3000/api/Master/GetProductionIssue?";
-  let GET_PRODUCTIONISSUE_BATCH="Batch=";
-  let GET_PRODUCTIONISSUE_BATCH_VALUE="";
-  let GET_PRODUCTIONISSUE_WHSCODE="&WhsCode=";
-  let GET_PRODUCTIONISSUE_WHSCODE_VALUE="";
-  let GET_PRODUCTIONISSUE_BRANCH="&Branch=";
-  let GET_PRODUCTIONISSUE_BRANCH_VALUE=parseInt(user?.Branch[0].BranchCode);
+  const logProductionStartToNewRelic = (username, productionDetails) => {
+    if (!productionLogged) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Api-Key", process.env.NEXT_PUBLIC_NEWRELIC_API_KEY);
+  
+      var logPayload = {
+        timestamp: Date.now(),
+        message: `User '${username}' production BreakDown with details: ${JSON.stringify(productionDetails)}`,
+        logtype: "productionlogs",
+        service: "production-service",
+        hostname: "production.example.com"
+      };
+  
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(logPayload),
+        redirect: 'follow'
+      };
+  
+      fetch(process.env.NEXT_PUBLIC_NEWRELIC_LOG_ENDPOINT, requestOptions)
+        .then(response => response.text())
+        .then(result => {
+          console.log(result);
+          setProductionLogged(true);
+        })
+        .catch(error => console.error('Error logging production start to New Relic:', error));
+    }
+  };
+  
 
   useEffect(() => {
     fetchData();
@@ -227,6 +251,9 @@ function Breakdown() {
         ReasonBreakdown: selectedReason.value,
         Sqm: bladeSqCm,
       }));
+
+      logProductionStartToNewRelic(user.Name, postData);
+
     } else {
       console.error("Please select all required options before stopping production.");
     }
