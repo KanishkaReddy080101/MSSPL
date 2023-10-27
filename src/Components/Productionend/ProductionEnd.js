@@ -96,7 +96,7 @@ function ProductionEnd() {
           console.log(result);
           setProductionLogged(true);
         })
-        .catch(error => console.error('Error logging production start to New Relic:', error));
+        .catch(error => console.error('Error logging production end to New Relic:', error));
     }
   };
 
@@ -423,6 +423,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
         })
       }
 
+      if (readyStockSale === false ? lineDetails.length >= 3 : lineDetails.length >= 1) {
         const postData = {
           Branch: parseInt(user?.Branch[0].BranchCode),
           Series: 216,
@@ -439,17 +440,21 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
           ItemCode: grnNo,
           LineDetails: lineDetails,
         };
+        
         if (((Weight * numberOfPieces) + (Weight2 * numberOfPieces2) <= blockWeight) && 
-        ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2) <= Length) ||
-        ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2) <= Width) || 
-        ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2) <= Thickness)) {
-          console.log('post data', postData)
+            ((Length1 * numberOfPieces) + (Length2 * numberOfPieces2) <= Length) ||
+            ((Width1 * numberOfPieces) + (Width2 * numberOfPieces2) <= Width) || 
+            ((Thickness1 * numberOfPieces) + (Thickness2 * numberOfPieces2) <= Thickness)) {
+          console.log('post data', postData);
           setPostData(postData);
           setShowConfirmation(true);
+          logProductionStartToNewRelic(user.Name, postData);
         } else {
           setShowBlockWeightPopup(true);
         }
-        logProductionStartToNewRelic(user.Name, postData);
+      } else {
+        console.error("There should be at least 3 line details, including scrap.");
+      }
     } else {
       console.error("Please select all required options before stopping production.");
     }
