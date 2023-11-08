@@ -37,35 +37,40 @@ export const UserProvider = ({ children }) => {
   async function loginUser(event, username, password) {
     event.preventDefault();
     logUserLoginToNewRelic(username);
-    console.log(event)
-
+  
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_LOGIN_API_ENDPOINT}?username=${username}&password=${password}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
-
-      console.log(response)
-
-      const data = await response.json();
-
-      if (response.ok && data.length > 0) {
-        const user = data.find(user => user.UserID === username && user.Password === password);
-        if (user) {
-          setUser(user);
-          const branch = user.Branch[0];
-          router.push("/production-home");
+  
+      console.log(response.status); // Log the response status code
+  
+      if (response.ok) {
+        const data = await response.json();
+        if (data.length > 0) {
+          const user = data.find((user) => user.UserID === username && user.Password === password);
+          if (user) {
+            setUser(user);
+            const branch = user.Branch[0];
+            router.push("/production-home");
+          } else {
+            alert("User not found");
+          }
         } else {
-          alert("User not found");
+          alert("Login failed");
         }
       } else {
-        alert("Login failed");
+        // Log the response text in case of an error
+        console.error(`An error occurred while logging in: ${await response.text()}`);
+        alert("An error occurred while logging in.");
       }
     } catch (error) {
       console.error("An error occurred while logging in:", error);
       alert("An error occurred while logging in: " + error.message);
     }
   }
+  
 
   useEffect(() => {
     if (!user) {

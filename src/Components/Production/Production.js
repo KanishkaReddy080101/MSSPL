@@ -265,8 +265,6 @@ const Production = () => {
         LineNum: selectedLinesOrderOption ? selectedLinesOrderOption.value : "",
         BatchNum: selectedBatchNoOption ? selectedBatchNoOption.value : "",
       }));
-
-      logProductionStartToNewRelic(user.Name, postData);
     } else {
       console.error("Please select all required options before starting production.");
     }
@@ -275,7 +273,9 @@ const Production = () => {
   useEffect(() => {
     if(postData.BladeCode && postData.BladeBatch && postData.SalesOrderNumber) {
       setShowConfirmation(true);
+      logProductionStartToNewRelic(user.Name, postData);
       console.log(postData)
+      
     }
   }, [postData]);
 
