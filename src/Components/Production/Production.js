@@ -144,13 +144,6 @@ const Production = () => {
   const handleBladeMasterChange = (selectedOption) => {
     setSelectedBladeMasterOption(selectedOption);
   
-    // const selectedMachineItemNoOption = machineItemNoOptions.find((option) => option.value === selectedValue);
-    // if (selectedMachineItemNoOption) {
-    //   setSelectedMachineItemNoOption(selectedMachineItemNoOption);
-    // } else {
-    //   console.error("Selected Machine Item No option not found!");
-    // }
-  
     const selectedBatch = selectedOption.batchQuantity;
     if (selectedBatch) {
       setBladeQuantity(selectedBatch);

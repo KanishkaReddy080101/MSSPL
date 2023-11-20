@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { logger } from "@/../logger"; // our logger import
+// import { logger } from "@/../logger"; // our logger import
 
 export async function GET(req) {
 
