@@ -39,7 +39,7 @@ export const UserProvider = ({ children }) => {
     logUserLoginToNewRelic(username);
   
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_LOGIN_API_ENDPOINT}?username=${username}&password=${password}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_LOGIN_API_ENDPOINT}?UserID=${username}&Password=${password}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });

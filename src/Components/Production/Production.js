@@ -34,6 +34,7 @@ const Production = () => {
   const [showResponse, setShowResponse] = useState(false)
   const [postResponse, setPostResponse] = useState('')
   const [productionLogged, setProductionLogged] = useState(false);
+  const [userInput, setUserInput] = useState('');
   const { user } = useContext(UserContext);
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -80,7 +81,6 @@ const Production = () => {
         .catch(error => console.error('Error logging production start to New Relic:', error));
     }
   };
-  
 
   useEffect(() => {
     fetchCuttingMachines();
@@ -172,7 +172,7 @@ const Production = () => {
 
   const batchNo = async () => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT + `&Branch=${parseInt(user.Branch[0].BranchCode)}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT}?Branch=${parseInt(user.Branch[0].BranchCode)}&BatchInitial=${userInput}&WhsCode=`);
       const result = await response.json();
       const batchNos = result.responseObject.map((param) => ({
         value: param["BatchNum"],
@@ -194,8 +194,16 @@ const Production = () => {
     }
   };
 
+  const handleUserInputSubmit = () => {
+    if (userInput.trim() === '') {
+      console.error('Please enter a valid user input.');
+      return;
+    }
+    batchNo();
+  };
+
   useEffect(() => {
-    if (selectedSalesOrderOption) {
+    if (selectedSalesOrderOption && userInput) {
       batchNo();
     }
   }, [selectedSalesOrderOption]);
@@ -227,7 +235,7 @@ const Production = () => {
     if (selectedBatchNoOption) {
       const fetchData = async () => {
         try {
-          const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT + `&Branch=${parseInt(user.Branch[0].BranchCode)}`);
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT}?Branch=${parseInt(user.Branch[0].BranchCode)}&BatchInitial=${userInput}&WhsCode=`);
           const result = await response.json();
           setBatchDetails(result.responseObject);
         } catch (error) {
@@ -236,7 +244,11 @@ const Production = () => {
       };
       fetchData();
     }
-  }, [selectedBatchNoOption]);
+  }, [selectedBatchNoOption, userInput]);
+
+  const handleUserInputChange = (e) => {
+    setUserInput(e.target.value)
+  }
 
   const handleStartProduction = () => {
     if (
@@ -339,25 +351,8 @@ const Production = () => {
             />
             </div>
           </div>
+
           <div className="col">
-          <div className="form-control mb-3">
-            <label htmlFor="batchNo">Item Batch No</label>
-            <Select
-              id="batchNo"
-              instanceId="batchNo"
-              className={"select-form-control select-dropdown"}
-              options={batchNoOptions}
-              value={selectedBatchNoOption}
-              onChange={handleBatchNoChange}
-              placeholder={selectedBatchNoOption ? selectedBatchNoOption.label : "Select Batch No"}
-            />
-            </div>
-          </div>
-        </div>
-
-        <div className="row pb-3">
-
-        <div className="col">
           <div className="form-control mb-3">
             <label htmlFor="lineNo">Line No</label>
             <Select
@@ -371,6 +366,49 @@ const Production = () => {
             />
             </div>
           </div>
+          </div>
+          <div className="row pb-3">
+          <div className="d-flex">
+            <div className=" form-control mb-3">
+              <label htmlFor="UserInput">Batch Input</label>
+              <div className='d-flex'>
+              <input
+                id="UserInput"
+                type="text"
+                className="form-control"
+                value={userInput}
+                onChange={handleUserInputChange}
+              />
+              <button
+          className="btn btn-primary m-4 mt-2 mb-3"
+          type="button"
+          onClick={handleUserInputSubmit}
+        >
+          Search
+        </button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div className="row pb-3">
+
+        <div className="col">
+      <div className="form-control mb-3">
+        <label htmlFor="batchNo">Item Batch No</label>
+          <Select
+            id="batchNo"
+            instanceId="batchNo"
+            className={"select-form-control select-dropdown"}
+            options={batchNoOptions}
+            value={selectedBatchNoOption}
+            onChange={handleBatchNoChange}
+            isDisabled={!userInput}
+            placeholder={selectedBatchNoOption ? selectedBatchNoOption.label : "Select Batch No"}
+          />
+      </div>
+    </div>
           
           <div className="col">
             <div className=" form-control mb-3">
