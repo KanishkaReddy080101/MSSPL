@@ -3,6 +3,7 @@ import Select from "react-select";
 import { UserContext } from '@/UserContext';
 import ConfirmationPopup from "./ConfirmationPopup";
 import ConfirmationResponse from './ConfirmationResponse';
+import WeightPopup from './WeightPopup';
 
 function ProductionEnd() {
   const { user } = useContext(UserContext);
@@ -52,10 +53,63 @@ function ProductionEnd() {
   const [postResponse, setPostResponse] = useState('')
   const [showBlockWeightPopup, setShowBlockWeightPopup] = useState(false);
   const [productionLogged, setProductionLogged] = useState(false);
+  const [showWeightPopup, setShowWeightPopup] = useState(false);
+  const [showWeightPopup2, setShowWeightPopup2] = useState(false);
+  const [selectedBinForWeight, setSelectedBinForWeight] = useState(null);
+  // const [getWeightChecked, setGetWeightChecked] = useState(false);
+  // const [getWeightChecked2, setGetWeightChecked2] = useState(false);
   const [scrapBin, setScrapBin] = useState('')
   const [postData, setPostData] = useState('');
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
+  const handleGetWeightToggle = () => {
+    setShowWeightPopup(true);
+    // setGetWeightChecked(true)
+  };
+  const handleGetWeightToggle2 = () => {
+    setShowWeightPopup2(true);
+    // setGetWeightChecked2(true)
+  };
+
+  const handleWeightPopupConfirm = async () => {
+    try {
+      const response = await fetch('https://f004.backblazeb2.com/file/assist-public/bay01-blr.txt');
+      const data = await response.text();
+      const parsedData = parseFloat(data.trim());
+  
+      setWeight(parsedData);
+  
+      setShowWeightPopup(false);
+    } catch (error) {
+      console.error('Error fetching weight data:', error);
+    }
+  };
+  const handleWeightPopupConfirm2 = async () => {
+    try {
+      const response = await fetch('https://f004.backblazeb2.com/file/assist-public/bay01-blr.txt');
+      const data = await response.text();
+      const parsedData = parseFloat(data.trim());
+  
+      setWeight2(parsedData);
+  
+      setShowWeightPopup2(false);
+    } catch (error) {
+      console.error('Error fetching weight data:', error);
+    }
+  };
+  
+
+  const handleWeightPopupClose = () => {
+    // Handle the close action here
+    setShowWeightPopup(false);
+    // setGetWeightChecked(false)
+    // setGetWeightChecked2(false)
+  };
+
+  const handleBinForWeightChange = (selectedOption) => {
+    setSelectedBinForWeight(selectedOption);
+  };
 
   useEffect(() => {
     if (parseInt(user?.Branch[0].BranchCode) === 3) {
@@ -847,8 +901,8 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               isDisabled={finishGood1 === true}
             />
           </div>
-
-            <div className="form-floating mb-3">
+          <div className='d-flex align-items-center justify-content-between'>
+            <div className="form-floating">
               <input type="number" 
               className="form-control" 
               id="floatingInputWeight1" 
@@ -861,13 +915,24 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
                 Weight(Kg)
               </label>
             </div>
+            <button className='btn btn-primary' onClick={handleGetWeightToggle}>Get Weight</button>
+            </div>
 
-            <div className="fform-floating mb-3 orm-check form-switch">
-              <input className="form-check-input" type="checkbox" id="multiplePieces1" onChange={handleMultiplePiecesChange} />
+            {/* <div className='d-flex justify-content-start'> */}
+  <div className="form-check form-switch mb-3">
+  <input className="form-check-input" type="checkbox" id="multiplePieces1" onChange={handleMultiplePiecesChange} />
               <label className="form-check-label" htmlFor="multiplePieces1">
                 Multiple Pieces
               </label>
-            </div>
+  </div>
+  {/* <div className="form-check form-switch mb-3 ms-3">
+  <input className="form-check-input" type="checkbox" id="getWeight" onChange={handleGetWeightToggle} checked={getWeightChecked}/>
+    <label className="form-check-label" htmlFor="getWeight">
+      Get Weight
+    </label>
+  </div>
+</div> */}
+
 
             <div className="form-floating mb-3">
               <input
@@ -974,8 +1039,8 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
               isDisabled={finishGood2 === true}
             />
           </div>
-
-            <div className="form-floating mb-3">
+          <div className='d-flex align-items-center justify-content-between'>
+            <div className="form-floating">
               <input type="number" 
               className="form-control" 
               id="floatingInputWeight2" 
@@ -988,13 +1053,22 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
                 Weight(Kg)
               </label>
             </div>
-
-            <div className="fform-floating mb-3 orm-check form-switch">
-              <input className="form-check-input" type="checkbox" id="multiplePieces2" onChange={handleMultiplePiecesChange2} />
-              <label className="form-check-label" htmlFor="multiplePieces2">
-                Multiple Pieces
-              </label>
+            <button className='btn btn-primary' onClick={handleGetWeightToggle2}>Get Weight</button>
             </div>
+            {/* <div className='d-flex justify-content-start'> */}
+  <div className="form-check form-switch mb-3">
+    <input className="form-check-input" type="checkbox" id="multiplePieces2" onChange={handleMultiplePiecesChange2} />
+    <label className="form-check-label" htmlFor="multiplePieces2">
+      Multiple Pieces
+    </label>
+  </div>
+  {/* <div className="form-check form-switch mb-3 ms-3">
+    <input className="form-check-input" type="checkbox" id="getWeight" onChange={handleGetWeightToggle2} checked={getWeightChecked2}/>
+    <label className="form-check-label" htmlFor="getWeight">
+      Get Weight
+    </label>
+  </div> */}
+{/* </div>       */}
 
             <div className="form-floating mb-3">
               <input
@@ -1034,6 +1108,22 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
           <div className="col"></div>
         </div>
       </div>
+      {showWeightPopup && (
+        <WeightPopup
+          binOptions={binOptions}
+          onConfirm={handleWeightPopupConfirm}
+          onClose={handleWeightPopupClose}
+          onBinChange={handleBinForWeightChange}
+        />
+      )}
+      {showWeightPopup2 && (
+        <WeightPopup
+          binOptions={binOptions}
+          onConfirm={handleWeightPopupConfirm2}
+          onClose={handleWeightPopupClose}
+          onBinChange={handleBinForWeightChange}
+        />
+      )}
       {showConfirmation && (
         <ConfirmationPopup
           data={{
