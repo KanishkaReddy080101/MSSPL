@@ -46,7 +46,7 @@ function ProductionEnd() {
   const [finishGood2, setFinishGood2] = useState(false);
   const [readyStockSale, setReadyStockSale] = useState(false)
   const [selectedIssueDocNum, setSelectedIssueDocNum] = useState(null);
-    const [issueDocNumOptions, setIssueDocNumOptions] = useState([]);
+  const [issueDocNumOptions, setIssueDocNumOptions] = useState([]);
   const [batchOccurrenceCount, setBatchOccurrenceCount] = useState('')
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showResponse, setShowResponse] = useState(false)
@@ -56,8 +56,8 @@ function ProductionEnd() {
   const [showWeightPopup, setShowWeightPopup] = useState(false);
   const [showWeightPopup2, setShowWeightPopup2] = useState(false);
   const [selectedBinForWeight, setSelectedBinForWeight] = useState(null);
-  // const [getWeightChecked, setGetWeightChecked] = useState(false);
-  // const [getWeightChecked2, setGetWeightChecked2] = useState(false);
+  const [bayOptions, setBayOptions] = useState(['bay1', 'bay2', 'bay3', 'bay4']);
+  const [selectedBay, setSelectedBay] = useState(null);
   const [scrapBin, setScrapBin] = useState('')
   const [postData, setPostData] = useState('');
   const currentDate = new Date().toISOString().slice(0, 10);
@@ -65,12 +65,18 @@ function ProductionEnd() {
 
   const handleGetWeightToggle = () => {
     setShowWeightPopup(true);
-    // setGetWeightChecked(true)
   };
   const handleGetWeightToggle2 = () => {
     setShowWeightPopup2(true);
-    // setGetWeightChecked2(true)
   };
+
+  const handleBayChange = (selectedBay) => {
+    setSelectedBay(selectedBay);
+  };
+  // const readWeightFromFile = (bay) => {
+  //   const defaultWeight = 50;
+  //   setBlockWeight(defaultWeight);
+  // };
 
   const handleWeightPopupConfirm = async () => {
     try {
@@ -101,10 +107,10 @@ function ProductionEnd() {
   
 
   const handleWeightPopupClose = () => {
-    // Handle the close action here
     setShowWeightPopup(false);
-    // setGetWeightChecked(false)
-    // setGetWeightChecked2(false)
+  };
+  const handleWeightPopupClose2 = () => {
+    setShowWeightPopup2(false)
   };
 
   const handleBinForWeightChange = (selectedOption) => {
@@ -1110,7 +1116,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
       </div>
       {showWeightPopup && (
         <WeightPopup
-          binOptions={binOptions}
+        bayOptions={bayOptions.map((bay) => ({ value: bay, label: bay }))}
           onConfirm={handleWeightPopupConfirm}
           onClose={handleWeightPopupClose}
           onBinChange={handleBinForWeightChange}
@@ -1118,9 +1124,9 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
       )}
       {showWeightPopup2 && (
         <WeightPopup
-          binOptions={binOptions}
+          bayOptions={bayOptions.map((bay) => ({ value: bay, label: bay }))}
           onConfirm={handleWeightPopupConfirm2}
-          onClose={handleWeightPopupClose}
+          onClose={handleWeightPopupClose2}
           onBinChange={handleBinForWeightChange}
         />
       )}
