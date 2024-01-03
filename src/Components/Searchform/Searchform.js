@@ -60,7 +60,7 @@ const Searchform = () => {
 
   const fetchOptions = async () => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT + `&Branch=${parseInt(user.Branch[0].BranchCode)}`);
+      const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILSs_API_ENDPOINT + `&Branch=${parseInt(user.Branch[0].BranchCode)}`);
       console.log(response)
       const result = await response.json();
       const { responseObject } = result;
@@ -108,7 +108,7 @@ const Searchform = () => {
   };
 
   const handleSearch = async () => {
-    const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILS_API_ENDPOINT  + `&Branch=${parseInt(user.Branch[0].BranchCode)}`);
+    const response = await fetch(process.env.NEXT_PUBLIC_BATCHDEATILSs_API_ENDPOINT  + `&Branch=${parseInt(user.Branch[0].BranchCode)}`);
     const result = await response.json();
     const { responseObject } = result;
     const results = responseObject.filter((param) => {
