@@ -5,7 +5,7 @@ import React, { useState, useContext } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react'
-// import { UserContext } from '@/UserContext';
+import { UserContext } from '@/UserContext';
 import "../styles/Home.module.css";
 
 function Login() {
