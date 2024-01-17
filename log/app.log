@@ -1,0 +1,7 @@
+{"level":"info","message":"Hello world","timestamp":"2023-10-09 10:26:14"}
+{"level":"warn","message":"Warning message","timestamp":"2023-10-09 10:26:14"}
+{"level":"debug","message":"Debugging info","timestamp":"2023-10-09 10:26:14"}
+{"level":"info","message":"Hello world","timestamp":"2023-10-09 10:26:50"}
+{"level":"warn","message":"Warning message","timestamp":"2023-10-09 10:26:50"}
+{"level":"debug","message":"Debugging info","timestamp":"2023-10-09 10:26:50"}
+{"level":"info","message":"login page called","timestamp":"2023-10-09 10:27:43"}
