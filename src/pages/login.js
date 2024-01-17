@@ -9,42 +9,42 @@ import { signIn } from 'next-auth/react'
 import "../styles/Home.module.css";
 
 function Login() {
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [branchCode, setBranchCode] = useState("");
-  // const { user, loginUser } = useContext(UserContext);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [branchCode, setBranchCode] = useState("");
+  const { user, loginUser } = useContext(UserContext);
 
-  // console.log(user);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [branchCode, setBranchCode] = useState("");
+  console.log(user);
+    // const [username, setUsername] = useState('');
+    // const [password, setPassword] = useState('');
+    // const [branchCode, setBranchCode] = useState("");
     // const { user } = useContext(UserContext);
   
-    const loginUser = async (event) => {
-      event.preventDefault();
+    // const loginUser = async (event) => {
+    //   event.preventDefault();
   
-      try {
-        const result = await signIn('credentials', {
-          username: username,
-            password: password,
-            // callbackUrl: "http://localhost:3000/login",
-            redirect: false,
-        });
+    //   try {
+    //     const result = await signIn('credentials', {
+    //       username: username,
+    //         password: password,
+    //         // callbackUrl: "http://localhost:3000/login",
+    //         redirect: false,
+    //     });
   
-        if (result.error) {
-          console.error('Authentication failed:', result.error);
-          alert('Authentication failed');
-        } else {
-          console.log('User:', user);
-          console.log(result)
-          router.push("/production-home");
-          // You can check result.url and redirect accordingly
-        }
-      } catch (error) {
-        console.error('An error occurred while logging in:', error);
-        alert('An error occurred while logging in: ' + error.message);
-      }
-    };
+    //     if (result.error) {
+    //       console.error('Authentication failed:', result.error);
+    //       alert('Authentication failed');
+    //     } else {
+    //       console.log('User:', user);
+    //       console.log(result)
+    //       router.push("/production-home");
+    //       // You can check result.url and redirect accordingly
+    //     }
+    //   } catch (error) {
+    //     console.error('An error occurred while logging in:', error);
+    //     alert('An error occurred while logging in: ' + error.message);
+    //   }
+    // };
 
   return (
     <>

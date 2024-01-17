@@ -63,136 +63,136 @@ function ProductionEnd() {
   const currentDate = new Date().toISOString().slice(0, 10);
   const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
-  // const handleGetWeightToggle = () => {
-  //   setShowWeightPopup(true);
-  // };
-  // const handleGetWeightToggle2 = () => {
-  //   setShowWeightPopup2(true);
-  // };
+  const handleGetWeightToggle = () => {
+    setShowWeightPopup(true);
+  };
+  const handleGetWeightToggle2 = () => {
+    setShowWeightPopup2(true);
+  };
 
-  // const handleBayChange = (selectedBay) => {
-  //   setSelectedBay(selectedBay);
-  // };
-  // const getBayValues = (branchCode) => {
-  //   switch (parseInt(branchCode)) {
-  //     case 3:
-  //       return {
-  //         Bay1: '/Scale1/Scale1.txt',
-  //         Bay2: '/Scale2/Scale2.txt',
-  //         Bay3: '/Scale3/Scale3.txt',
-  //         Bay4: '/Scale4/Scale4.txt',
-  //         Bay5: '/Scale5/Scale5.txt',
-  //       };
-  //     case 4:
-  //       return {
-  //         Bay1: '/Scale1/Scale1.txt',
-  //         Bay2: '/Scale2/Scale2.txt',
-  //         Bay3: '/Scale3/Scale3.txt',
-  //         Bay4: '/Scale4/Scale4.txt',
-  //         Bay5: '/Scale5/Scale5.txt',
-  //       };
-  //     case 5:
-  //       return {
-  //         Bay1: '/Scale1/Scale1.txt',
-  //         Bay2: '/Scale2/Scale2.txt',
-  //         Bay3: '/Scale3/Scale3.txt',
-  //         Bay4: '/Scale4/Scale4.txt',
-  //         Bay5: '/Scale5/Scale5.txt',
-  //       };
-  //     case 6:
-  //       return {
-  //         Bay1: '/Scale1/Scale1.txt',
-  //         Bay2: '/Scale2/Scale2.txt',
-  //         Bay3: '/Scale3/Scale3.txt',
-  //         Bay4: '/Scale4/Scale4.txt',
-  //         Bay5: '/Scale5/Scale5.txt',
-  //       };
-  //     default:
-  //       return {};
-  //   }
-  // };
+  const handleBayChange = (selectedBay) => {
+    setSelectedBay(selectedBay);
+  };
+  const getBayValues = (branchCode) => {
+    switch (parseInt(branchCode)) {
+      case 3:
+        return {
+          Bay1: '/Scale1/Scale1.txt',
+          Bay2: '/Scale2/Scale2.txt',
+          Bay3: '/Scale3/Scale3.txt',
+          Bay4: '/Scale4/Scale4.txt',
+          Bay5: '/Scale5/Scale5.txt',
+        };
+      case 4:
+        return {
+          Bay1: '/Scale1/Scale1.txt',
+          Bay2: '/Scale2/Scale2.txt',
+          Bay3: '/Scale3/Scale3.txt',
+          Bay4: '/Scale4/Scale4.txt',
+          Bay5: '/Scale5/Scale5.txt',
+        };
+      case 5:
+        return {
+          Bay1: '/Scale1/Scale1.txt',
+          Bay2: '/Scale2/Scale2.txt',
+          Bay3: '/Scale3/Scale3.txt',
+          Bay4: '/Scale4/Scale4.txt',
+          Bay5: '/Scale5/Scale5.txt',
+        };
+      case 6:
+        return {
+          Bay1: '/Scale1/Scale1.txt',
+          Bay2: '/Scale2/Scale2.txt',
+          Bay3: '/Scale3/Scale3.txt',
+          Bay4: '/Scale4/Scale4.txt',
+          Bay5: '/Scale5/Scale5.txt',
+        };
+      default:
+        return {};
+    }
+  };
 
-  // useEffect(() => {
-  //   const branchBayValues = getBayValues(user?.Branch[0].BranchCode);
-  //   setBayOptions(Object.keys(branchBayValues));
-  // }, [user]);
+  useEffect(() => {
+    const branchBayValues = getBayValues(user?.Branch[0].BranchCode);
+    setBayOptions(Object.keys(branchBayValues));
+  }, [user]);
 
 
-  // const handleWeightPopupConfirm = async () => {
-  //   try {
-  //     const branchBayValues = getBayValues(user?.Branch[0].BranchCode);
-  //     const selectedBayUrl = branchBayValues[selectedBay.value];
+  const handleWeightPopupConfirm = async () => {
+    try {
+      const branchBayValues = getBayValues(user?.Branch[0].BranchCode);
+      const selectedBayUrl = branchBayValues[selectedBay.value];
   
-  //     if (!selectedBayUrl) {
-  //       console.error('Invalid branch code or bay selection');
-  //       return;
-  //     }
+      if (!selectedBayUrl) {
+        console.error('Invalid branch code or bay selection');
+        return;
+      }
   
-  //     const response = await fetch(selectedBayUrl);
-  //     if (!response.ok) {
-  //       console.error('Error fetching weight data. Server returned:', response.status, response.statusText);
-  //       return;
-  //     }
+      const response = await fetch(selectedBayUrl);
+      if (!response.ok) {
+        console.error('Error fetching weight data. Server returned:', response.status, response.statusText);
+        return;
+      }
   
-  //     const data = await response.text();
-  //     const parsedData = parseFloat(data.trim());
+      const data = await response.text();
+      const parsedData = parseFloat(data.trim());
   
-  //     if (isNaN(parsedData)) {
-  //       alert('Weight file is empty or contains invalid data!');
-  //       return;
-  //     }
+      if (isNaN(parsedData)) {
+        alert('Weight file is empty or contains invalid data!');
+        return;
+      }
   
-  //     setWeight(parsedData);
-  //     setShowWeightPopup(false);
-  //   } catch (error) {
-  //     console.error('Error fetching weight data:', error);
-  //   }
-  // };
+      setWeight(parsedData);
+      setShowWeightPopup(false);
+    } catch (error) {
+      console.error('Error fetching weight data:', error);
+    }
+  };
   
-  // const handleWeightPopupConfirm2 = async () => {
-  //   try {
-  //     const branchBayValues = getBayValues(user?.Branch[0].BranchCode);
-  //     const selectedBayUrl = branchBayValues[selectedBay.value];
+  const handleWeightPopupConfirm2 = async () => {
+    try {
+      const branchBayValues = getBayValues(user?.Branch[0].BranchCode);
+      const selectedBayUrl = branchBayValues[selectedBay.value];
   
-  //     if (!selectedBayUrl) {
-  //       console.error('Invalid branch code or bay selection');
-  //       return;
-  //     }
+      if (!selectedBayUrl) {
+        console.error('Invalid branch code or bay selection');
+        return;
+      }
   
-  //     const response = await fetch(selectedBayUrl);
-  //     if (!response.ok) {
-  //       console.error('Error fetching weight data. Server returned:', response.status, response.statusText);
-  //       return;
-  //     }
+      const response = await fetch(selectedBayUrl);
+      if (!response.ok) {
+        console.error('Error fetching weight data. Server returned:', response.status, response.statusText);
+        return;
+      }
   
-  //     const data = await response.text();
-  //     const parsedData = parseFloat(data.trim());
+      const data = await response.text();
+      const parsedData = parseFloat(data.trim());
   
-  //     if (isNaN(parsedData)) {
-  //       alert('Weight file is empty or contains invalid data!');
-  //       return;
-  //     }
+      if (isNaN(parsedData)) {
+        alert('Weight file is empty or contains invalid data!');
+        return;
+      }
   
-  //     setWeight2(parsedData);
-  //     setShowWeightPopup2(false);
-  //   } catch (error) {
-  //     console.error('Error fetching weight data:', error);
-  //   }
-  // };
+      setWeight2(parsedData);
+      setShowWeightPopup2(false);
+    } catch (error) {
+      console.error('Error fetching weight data:', error);
+    }
+  };
   
   
   
 
-  // const handleWeightPopupClose = () => {
-  //   setShowWeightPopup(false);
-  // };
-  // const handleWeightPopupClose2 = () => {
-  //   setShowWeightPopup2(false)
-  // };
+  const handleWeightPopupClose = () => {
+    setShowWeightPopup(false);
+  };
+  const handleWeightPopupClose2 = () => {
+    setShowWeightPopup2(false)
+  };
 
-  // const handleBinForWeightChange = (selectedOption) => {
-  //   setSelectedBinForWeight(selectedOption);
-  // };
+  const handleBinForWeightChange = (selectedOption) => {
+    setSelectedBinForWeight(selectedOption);
+  };
 
   useEffect(() => {
     if (parseInt(user?.Branch[0].BranchCode) === 3) {
@@ -998,7 +998,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
                 Weight(Kg)
               </label>
             </div>
-            {/* <button className='btn btn-primary' onClick={handleGetWeightToggle}>Get Weight</button> */}
+            <button className='btn btn-primary' onClick={handleGetWeightToggle}>Get Weight</button>
             </div>
 
   <div className="form-check form-switch mb-3">
@@ -1127,8 +1127,13 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
                 Weight(Kg)
               </label>
             </div>
-            {/* <button className='btn btn-primary' onClick={handleGetWeightToggle2}>Get Weight</button> */}
+            <button className='btn btn-primary' onClick={handleGetWeightToggle2}>Get Weight</button>
             </div>
+            {selectedBay &&
+            <div>
+              <p style={{ color: 'red'}}> Weight should be less than {blockWeight - Weight}</p>
+              </div>
+              }
   <div className="form-check form-switch mb-3">
     <input className="form-check-input" type="checkbox" id="multiplePieces2" onChange={handleMultiplePiecesChange2} />
     <label className="form-check-label" htmlFor="multiplePieces2">
@@ -1173,7 +1178,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
           <div className="col"></div>
         </div>
       </div>
-      {/* {showWeightPopup && (
+      {showWeightPopup && (
         <WeightPopup
         bayOptions={bayOptions.map((bay) => ({ value: bay, label: bay }))}
           onConfirm={handleWeightPopupConfirm}
@@ -1188,7 +1193,7 @@ const handleIssueDocNumChange = async (selectedIssueDocNum) => {
           onClose={handleWeightPopupClose2}
           onBayChange={handleBayChange}
         />
-      )} */}
+      )}
       {showConfirmation && (
         <ConfirmationPopup
           data={{
