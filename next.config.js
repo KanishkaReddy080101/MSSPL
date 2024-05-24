@@ -9,23 +9,23 @@ const nextConfig = {
 		},
 		{
 		  source: "/Scale1/:path*",
-		  destination: "http://14.194.60.202:7070/Scale1/:path*",
+		  destination: "http://14.194.60.202:7072/Scale1/:path*",
 		},
 		{
 			source: "/Scale2/:path*",
-			destination: "http://14.194.60.202:7070/Scale2/:path*",
+			destination: "http://14.194.60.202:7072/Scale2/:path*",
 		  },
 		  {
 			source: "/Scale3/:path*",
-			destination: "http://14.194.60.202:7070/Scale3/:path*",
+			destination: "http://14.194.60.202:7072/Scale3/:path*",
 		  },
 		  {
 			source: "/Scale4/:path*",
-			destination: "http://14.194.60.202:7070/Scale4/:path*",
+			destination: "http://14.194.60.202:7072/Scale4/:path*",
 		  },
 		  {
 			source: "/Scale5/:path*",
-			destination: "http://14.194.60.202:7070/Scale5/:path*",
+			destination: "http://14.194.60.202:7072/Scale5/:path*",
 		  },
 	  ];
 	},

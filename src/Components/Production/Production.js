@@ -266,7 +266,7 @@ const Production = () => {
         BladeCode: selectedMachineItemNoOption.value,
         BladeBatch: selectedBladeMasterOption.value,
         MachineItemCode: selectedCuttingMachineOption.value,
-        SalesOrderNumber: selectedSalesOrderOption.value,
+        SalesOrderNumber: selectedSalesOrderOption.value.slice(4),
         LineNum: selectedLinesOrderOption ? selectedLinesOrderOption.value : "",
         BatchNum: selectedBatchNoOption ? selectedBatchNoOption.value : "",
       }));
