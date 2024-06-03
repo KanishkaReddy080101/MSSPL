@@ -8,6 +8,10 @@ const nextConfig = {
 		  destination: "http://14.194.60.202:8626/api/:path*",
 		},
 		{
+			source: "/productionEnd/:path*",
+			destination: "http://192.168.0.200:4656/productionEnd/:path*",
+		  },
+		{
 		  source: "/Scale1/:path*",
 		  destination: "http://14.194.60.202:7072/Scale1/:path*",
 		},
